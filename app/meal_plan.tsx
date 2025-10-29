@@ -47,10 +47,6 @@ export const unstable_settings = {
   anchor: '(tabs)',
 };
 
-type mealProps = {
-    mealSetCall: (name: string) => void
-}
-
 export default function MealPlannerHome() {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
