@@ -7,14 +7,9 @@ import {
     View
 } from "react-native";
 import 'react-native-reanimated';
-import { COLORS, styles } from './styles/global_style';
+import { COLORS, styles } from '../styles/global_style';
 
-type mealProps = {
-    name: string;
-    callback: void;
-}
-
-export default function IngredientListPage(props: mealProps) {
+export default function ProfilePage() {
     const scheme = useColorScheme();
     const isDark = scheme === "dark";
     
@@ -37,7 +32,7 @@ export default function IngredientListPage(props: mealProps) {
                 > 
                     <View>
                          <Text style={styles.cardTitle} numberOfLines={2}>
-                            Ingredient list for {props.name} ???
+                            Profile Page. Not Done Yet
                         </Text>
                     </View>
                 </ScrollView>

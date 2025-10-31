@@ -7,7 +7,7 @@ import {
     View
 } from "react-native";
 import 'react-native-reanimated';
-import { COLORS, styles } from './styles/global_style';
+import { COLORS, styles } from '../styles/global_style';
 
 export default function PlanCheckPage() {
     const scheme = useColorScheme();

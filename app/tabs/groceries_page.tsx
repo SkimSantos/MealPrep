@@ -7,9 +7,9 @@ import {
     View
 } from "react-native";
 import 'react-native-reanimated';
-import { COLORS, styles } from './styles/global_style';
+import { COLORS, styles } from '../styles/global_style';
 
-export default function ProfilePage() {
+export default function GroceriesPage() {
     const scheme = useColorScheme();
     const isDark = scheme === "dark";
     
@@ -32,7 +32,7 @@ export default function ProfilePage() {
                 > 
                     <View>
                          <Text style={styles.cardTitle} numberOfLines={2}>
-                            Profile Page. Not Done Yet
+                            Groceries Page. Not Done Yet
                         </Text>
                     </View>
                 </ScrollView>

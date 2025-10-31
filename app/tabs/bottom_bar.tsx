@@ -14,7 +14,7 @@ import PlanCheckPage from './plan_check_page';
 import ProfilePage from "./profile_page";
 
 
-import { COLORS, styles } from './styles/global_style';
+import { COLORS, styles } from '../styles/global_style';
 
 const Tab = createBottomTabNavigator();
 

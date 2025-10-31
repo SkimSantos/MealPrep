@@ -1,16 +1,17 @@
+import { router } from 'expo-router';
 import React from 'react';
 import {
-    ImageBackground,
-    ScrollView,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    useColorScheme,
-    View
+  ImageBackground,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  View
 } from "react-native";
 import 'react-native-reanimated';
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { COLORS, styles } from './styles/global_style';
+import { COLORS, styles } from '../styles/global_style';
 
 const CATEGORIES = [
   {
@@ -75,7 +76,7 @@ export default function MealPlannerHome() {
                 key={item.title}
                 activeOpacity={0.9}
                 style={styles.card}
-                onPress={() => {}}
+                onPress={() => router.push("/tabs/ingredient_list")}
                 accessibilityLabel={item.alt}
               >
                 <ImageBackground
