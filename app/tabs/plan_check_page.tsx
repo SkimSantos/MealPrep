@@ -5,6 +5,8 @@ import {
   Pressable,
   ScrollView,
   Text,
+  TextInput,
+  TouchableOpacity,
   useColorScheme,
   View
 } from "react-native";
@@ -22,6 +24,10 @@ export default function PlanCheckPage() {
     meals,
     toggleItem,
     resetMeals,
+    renameSection,
+    addItem,
+    updateItem,
+    removeItem
     // (you can also use addItem/removeItem/updateItem/addSection/etc. here)
   } = useIngredients();
 
@@ -112,7 +118,7 @@ export default function PlanCheckPage() {
                     </Text>
                   ) : (
                     meal.sections.map((s) => (
-                      SectionItem(meal.id, s, isDark, isEditing(meal.id, s.id), toggleEditing)
+                      SectionItem(meal.id, s, isDark, isEditing(meal.id, s.id), toggleEditing, renameSection, addItem, updateItem, removeItem)
                     ))
                   )}
                 </View>
@@ -177,8 +183,26 @@ function withOpacity(hex: string, opacity: number) {
   return hex + o;
 }
 
-function SectionItem(mID: string, s: Section, isDark: boolean, isEditing: boolean, toggle:(mid: string, sid: string) => void) {
+function SectionItem(mID: string, s: Section, isDark: boolean, isEditing: boolean,
+  toggle: (mid: string, sid: string) => void,
+  renameSec: (mid: string, sid: string, text: string) => void,
+  addItem: (mid: string, sid: string, newItem: Item) => void,
+  updateItem: (mid: string, sid: string, iid: string, patch: Partial<Item>) => void,
+  removeItem: (mid:string, sid:string, iid:string) => void
+) {
   const theme = isDark ? COLORS.dark : COLORS.light;
+
+  const setSectionTitle = (title: string) => (renameSec(mID, s.id, title))
+  const addNewItem = () => {
+    let itemCount = s.items.length;
+    let itemNewName = "item" + itemCount.toString;
+    while(s.items.filter(i => i.id === itemNewName).length > 0) {
+      itemCount++;
+      itemNewName = "item"+itemCount.toString;
+    }
+    const newItem: Item = {id:"item"+itemCount, label:"new item", checked:false, baseQty:1, unit:"U"}
+    addItem(mID, s.id, newItem);
+  }
 
   return (
     <View key={s.id} style={styles.sectionRow}>
@@ -190,21 +214,36 @@ function SectionItem(mID: string, s: Section, isDark: boolean, isEditing: boolea
             alignItems: "center",
             width: "100%",
           }}>
-            <Text
-              style={[styles.sectionTitle, { color: theme.text }]}
-              numberOfLines={1}
-            >
-              {s.title}
-            </Text>
+            {isEditing ? (
+              <View>
+                <TextInput
+                  onChangeText={newText => setSectionTitle(newText)}
+                  placeholder={s.title}
+                  defaultValue={s.title}
+                  style={[styles.inputTitle, { color: theme.text, borderColor: theme.text }]}
+                />
+              </View>
+            ) : (
+              <View>
+                <Text
+                  style={[styles.sectionTitle, { color: theme.text }]}
+                  numberOfLines={1}
+                >
+                  {s.title}
+                </Text>
+              </View>
+            )
+            }
             <Pressable style={styles.iconBtn} onPress={() => toggle(mID, s.id)}>
               <MaterialIcons
-                name={"edit"}
+                name={isEditing ? "done" : "edit"}
                 size={22}
                 color={theme.text}
               />
             </Pressable>
           </View>
-          <View style={{ paddingHorizontal: 25 }}>
+          {isEditing ? (
+            <View style={{ paddingHorizontal: 25 }}>
             {s.items.length === 0 ? (
               <Text
                 style={{
@@ -216,25 +255,115 @@ function SectionItem(mID: string, s: Section, isDark: boolean, isEditing: boolea
               </Text>
             ) : (
               s.items.map((i) => (
-                IngredientItem(mID, s.id, i, isDark, isEditing)
+                IngredientItem(mID, s.id, i, isDark, isEditing, updateItem, removeItem)
+              ))
+            )}
+            <TouchableOpacity style={styles.subFab} activeOpacity={0.9} onPress={() => addNewItem()}>
+              <MaterialIcons name="add" size={16} color={COLORS.textDark} />
+              <Text style={styles.fabText}>Add Item</Text>
+            </TouchableOpacity>
+          </View>
+          ):(
+            <View style={{ paddingHorizontal: 25 }}>
+            {s.items.length === 0 ? (
+              <Text
+                style={{
+                  color: theme.subtext,
+                  textAlign: "center",
+                }}
+              >
+                No items
+              </Text>
+            ) : (
+              s.items.map((i) => (
+                IngredientItem(mID, s.id, i, isDark, isEditing, updateItem, removeItem)
               ))
             )}
           </View>
+          )}
         </View>
       </View>
     </View>
   )
 }
 
-function IngredientItem(mID: string, sID: string, i: Item, isDark: boolean, isEditing: boolean) {
+function IngredientItem(mID: string, sID: string, i: Item, isDark: boolean, isEditing: boolean,
+  updateItem: (mid: string, sid: string, iid: string, patch: Partial<Item>) => void,
+  removeItem: (mid:string, sid:string, iid:string) => void
+) {
   const theme = isDark ? COLORS.dark : COLORS.light;
+  const setItem = (type: number, text: string) => {
+    switch (type) {
+      case 0:
+        i.label = text;
+        updateItem(mID, sID, i.id, i);
+        break;
+      case 1:
+        const newNumber: number = parseFloat(text);
+        i.baseQty = newNumber ? newNumber : 0;
+        updateItem(mID, sID, i.id, i);
+        break;
+      case 2:
+        i.unit = text;
+        updateItem(mID, sID, i.id, i);
+        break;
+      default:
+        updateItem(mID, sID, i.id, i);
+    }
+  }
 
   return (
     <View key={i.id} style={styles.itemsRow}>
-      <View style={styles.itemLeft}>
-        {isEditing ? (
-          <Text> Editing Mode </Text>
-        ) : (
+      {isEditing ? (
+        <View style={styles.itemLeft}>
+          <View style={{
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+          }}>
+            <TextInput
+              onChangeText={newLabel => setItem(0, newLabel)}
+              placeholder={i.label}
+              defaultValue={i.label}
+              style={{
+                color: theme.subtext,
+              }}
+            />
+            <View style={{
+              justifyContent: "flex-end",
+              flexDirection: "row",
+              alignItems: "center",
+            }}>
+              <TextInput
+                onChangeText={newNumber => setItem(1, newNumber)}
+                keyboardType='numeric'
+                placeholder={i.baseQty?.toString()}
+                defaultValue={i.baseQty?.toString()}
+                style={{
+                  color: theme.subtext,
+                }}
+              />
+              <TextInput
+                onChangeText={newText => setItem(2, newText)}
+                placeholder={i.unit}
+                defaultValue={i.unit}
+                style={{
+                  color: theme.subtext,
+                }}
+              />
+              <Pressable style={styles.iconBtn} onPress={() => removeItem(mID, sID, i.id)}>
+                <MaterialIcons
+                  name={"delete"}
+                  size={15}
+                  color={theme.text}
+                />
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      ) : (
+        <View style={styles.itemLeft}>
           <View style={{
             justifyContent: "space-between",
             flexDirection: "row",
@@ -252,8 +381,8 @@ function IngredientItem(mID: string, sID: string, i: Item, isDark: boolean, isEd
               {i.baseQty} {i.unit}
             </Text>
           </View>
-        )}
-      </View>
+        </View>
+      )}
     </View>
   )
 }

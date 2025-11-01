@@ -164,6 +164,19 @@ export const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 6,
   },
+  subFab: {
+    height: 30,
+    paddingHorizontal: 18,
+    borderRadius: 999,
+    backgroundColor: COLORS.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8 as any,
+    shadowColor: COLORS.primary,
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
   fabText: {
     color: COLORS.textDark,
     fontSize: 16,
@@ -326,4 +339,11 @@ export const styles = StyleSheet.create({
   },
   itemLeft: { flexDirection: "row", alignItems: "center", flexShrink: 1 },
   bottomItem: { alignItems: "center", justifyContent: "center" },
+  inputTitle: {
+    fontSize: 20,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
+    borderWidth: 1,
+  },
 });
