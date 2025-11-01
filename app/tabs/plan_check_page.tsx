@@ -25,6 +25,8 @@ export default function PlanCheckPage() {
     toggleItem,
     resetMeals,
     renameSection,
+    addSection,
+    removeSection,
     addItem,
     updateItem,
     removeItem
@@ -43,6 +45,19 @@ export default function PlanCheckPage() {
   const toggleEditing = (mealId: string, sectionId: string) =>
     setEditing(prev => ({ ...prev, [keyOf(mealId, sectionId)]: !prev[keyOf(mealId, sectionId)] }));
 
+  const addNewSection = (mid: string) => {
+    const meal = meals.find(m => m.id === mid);
+    if(meal === undefined) return;
+    let sectionCount = meal.sections.length;
+    if(sectionCount === undefined) sectionCount = 0;
+    let sectionName = "section" + sectionCount.toString;
+    while(meal.sections.filter(s => s.id === sectionName).length > 0) {
+      sectionCount++;
+      sectionName = "Section "+sectionCount.toString;
+    }
+    const newSection: Section = {id:sectionName, title:"New Section", items:[]}
+    addSection(mid, newSection)
+  }
 
   const [open, setOpen] = useState<Record<string, boolean>>({});
 
@@ -118,9 +133,27 @@ export default function PlanCheckPage() {
                     </Text>
                   ) : (
                     meal.sections.map((s) => (
-                      SectionItem(meal.id, s, isDark, isEditing(meal.id, s.id), toggleEditing, renameSection, addItem, updateItem, removeItem)
+                      SectionItem(
+                        meal.id, 
+                        s, 
+                        isDark, 
+                        isEditing(meal.id, s.id), 
+                        toggleEditing, 
+                        renameSection, 
+                        addItem, 
+                        updateItem, 
+                        removeItem,
+                        removeSection,
+                      )
                     ))
                   )}
+                  <TouchableOpacity activeOpacity={0.9}
+                    style={[styles.subFab, {backgroundColor: COLORS.secondary, shadowColor: COLORS.secondary}]}
+                    onPress={() => addNewSection(meal.id)}
+                  >
+                    <MaterialIcons name="add" size={15} color={COLORS.textLight} />
+                    <Text style={[styles.fabText, {color: COLORS.textLight}]}>Add Section</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             </View>
@@ -188,7 +221,8 @@ function SectionItem(mID: string, s: Section, isDark: boolean, isEditing: boolea
   renameSec: (mid: string, sid: string, text: string) => void,
   addItem: (mid: string, sid: string, newItem: Item) => void,
   updateItem: (mid: string, sid: string, iid: string, patch: Partial<Item>) => void,
-  removeItem: (mid:string, sid:string, iid:string) => void
+  removeItem: (mid:string, sid:string, iid:string) => void,
+  removeSection: (mid: string, sid: string) => void
 ) {
   const theme = isDark ? COLORS.dark : COLORS.light;
 
@@ -215,13 +249,23 @@ function SectionItem(mID: string, s: Section, isDark: boolean, isEditing: boolea
             width: "100%",
           }}>
             {isEditing ? (
-              <View>
+              <View style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
                 <TextInput
                   onChangeText={newText => setSectionTitle(newText)}
                   placeholder={s.title}
                   defaultValue={s.title}
                   style={[styles.inputTitle, { color: theme.text, borderColor: theme.text }]}
                 />
+                <Pressable style={styles.iconBtn} onPress={() => removeSection(mID, s.id)}>
+                  <MaterialIcons
+                    name={"delete"}
+                    size={22}
+                    color={theme.text}
+                  />
+                </Pressable>
               </View>
             ) : (
               <View>

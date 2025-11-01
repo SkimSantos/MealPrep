@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const COLORS = {
   primary: "#38e07b",
+  secondary: "#2a4232",
   backgroundLight: "#f6f8f7",
   backgroundDark: "#122017",
   textLight: "#f6f8f7",
@@ -173,6 +174,19 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8 as any,
     shadowColor: COLORS.primary,
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  subFabSec: {
+    height: 30,
+    paddingHorizontal: 18,
+    borderRadius: 999,
+    backgroundColor: COLORS.secondary,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8 as any,
+    shadowColor: COLORS.secondary,
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 6,
