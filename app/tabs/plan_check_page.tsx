@@ -20,28 +20,28 @@ type MealItem = {
 };
 
 export default function PlanCheckPage() {
-    const scheme = useColorScheme();
-    const isDark = scheme === "dark";
-    const theme = isDark ? COLORS.dark : COLORS.light;
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const theme = isDark ? COLORS.dark : COLORS.light;
 
-    const {
-        ready,
-        meals,
-        toggleItem,
-        resetMeals,
-        // (you can also use addItem/removeItem/updateItem/addSection/etc. here)
-      } = useIngredients();
+  const {
+    ready,
+    meals,
+    toggleItem,
+    resetMeals,
+    // (you can also use addItem/removeItem/updateItem/addSection/etc. here)
+  } = useIngredients();
 
-    const toggleOpen = (mealId: string) => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setOpen((o) => ({ ...o, [mealId]: !o[mealId] }));
-    };
+  const toggleOpen = (mealId: string) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setOpen((o) => ({ ...o, [mealId]: !o[mealId] }));
+  };
 
-    const [open, setOpen] = useState<Record<string, boolean>>({});
-    
-    const bg = isDark ? COLORS.backgroundDark : COLORS.backgroundLight;
-    const text = isDark ? COLORS.textLight : COLORS.textDark;
-    return (
+  const [open, setOpen] = useState<Record<string, boolean>>({});
+
+  const bg = isDark ? COLORS.backgroundDark : COLORS.backgroundLight;
+  const text = isDark ? COLORS.textLight : COLORS.textDark;
+  return (
     <View style={[styles.safe, { backgroundColor: bg }]}>
       <ScrollView
         contentContainerStyle={{ paddingBottom: 120 }}
@@ -114,12 +114,26 @@ export default function PlanCheckPage() {
                       <View key={s.id} style={styles.sectionRow}>
                         <View style={styles.sectionLeft}>
                           <View style={{ justifyContent: "center" }}>
-                            <Text
-                              style={[styles.sectionTitle, { color: theme.text }]}
-                              numberOfLines={1}
-                            >
-                              {s.title}
-                            </Text>
+                            <View style={{
+                              justifyContent: "space-between",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              width: "100%",
+                            }}>
+                              <Text
+                                style={[styles.sectionTitle, { color: theme.text }]}
+                                numberOfLines={1}
+                              >
+                                {s.title}
+                              </Text>
+                              <Pressable style={styles.iconBtn}>
+                                <MaterialIcons
+                                  name={"edit"}
+                                  size={22}
+                                  color={theme.text}
+                                />
+                              </Pressable>
+                            </View>
                             <View style={{ paddingHorizontal: 25 }}>
                               {s.items.length === 0 ? (
                                 <Text
@@ -134,21 +148,21 @@ export default function PlanCheckPage() {
                                 s.items.map((i) => (
                                   <View key={i.id} style={styles.itemsRow}>
                                     <View style={styles.itemLeft}>
-                                      <View style={{ 
-                                        justifyContent: "space-between", 
-                                        flexDirection: "row", 
+                                      <View style={{
+                                        justifyContent: "space-between",
+                                        flexDirection: "row",
                                         alignItems: "center",
                                         width: "100%",
                                       }}>
                                         <Text style={{
                                           color: theme.subtext,
                                         }}>
-                                          { i.label }
+                                          {i.label}
                                         </Text>
                                         <Text style={{
                                           color: theme.subtext,
                                         }}>
-                                          { i.baseQty } { i.unit }
+                                          {i.baseQty} {i.unit}
                                         </Text>
                                       </View>
                                     </View>

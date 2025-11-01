@@ -49,9 +49,14 @@ export default function IngredientListPage(props: mealProps) {
       })),
     ]) ?? [];
 
-  const formatQty = (baseQty?: number, unit?: string) => {
+  const formatQty = (sectionID?: string, baseQty?: number, unit?: string) => {
+    if (sectionID == null) return "";
     if (baseQty == null) return "";
-    const scaled = +(baseQty).toFixed(2);
+
+    const section = meal?.sections.find(s => s.id === sectionID);
+    const selectedItemsCount = section?.items.filter(i => i.checked).length ?? 1;
+
+    const scaled = +(baseQty / selectedItemsCount).toFixed(2);
     return `${stripTrailingZeros(scaled)} ${unit ?? ""}`.trim();
   };
 
@@ -134,11 +139,19 @@ export default function IngredientListPage(props: mealProps) {
                     style={[
                       styles.itemText,
                       {
-                        color: it.checked ? "#6b7280" : theme.text, // gray-500 when checked
+                        color: !it.checked ? "#6b7280" : theme.text, // gray-500 when not checked
                       },
                     ]}
                   >
-                    {it.label} - {formatQty(it.baseQty, it.unit)}
+                    {it.label}
+                  </Text>
+                  <Text style={[
+                      styles.itemText,
+                      {
+                        color: !it.checked ? "#6b7280" : theme.text, // gray-500 when not checked
+                      },
+                    ]}>
+                    {it.checked ? formatQty(item.secId, it.baseQty, it.unit) : formatQty("", it.baseQty, it.unit)}
                   </Text>
                 </View>
               </View>

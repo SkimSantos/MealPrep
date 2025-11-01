@@ -104,6 +104,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 120, // leave room for bottom nav + FAB
   },
   grid: {
+    justifyContent: "center",
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 15 as any, // RN doesn't support gap < 0.73; cast for TS convenience
