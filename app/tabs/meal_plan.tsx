@@ -54,7 +54,6 @@ export default function MealPlannerHome() {
 
   const bg = isDark ? COLORS.backgroundDark : COLORS.backgroundLight;
   const text = isDark ? COLORS.textLight : COLORS.textDark;
-  const placeholder = "Search for a recipe or ingredient";
 
   return (
     <View style={[styles.safe, { backgroundColor: bg }]}>
@@ -76,7 +75,7 @@ export default function MealPlannerHome() {
                 key={item.title}
                 activeOpacity={0.9}
                 style={styles.card}
-                onPress={() => router.push("/tabs/ingredient_list")}
+                onPress={() => router.push({ pathname: "./meals/[mealId]", params: { mealId: item.title } })}
                 accessibilityLabel={item.alt}
               >
                 <ImageBackground
