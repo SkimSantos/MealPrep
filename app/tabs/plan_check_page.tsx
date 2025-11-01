@@ -9,15 +9,8 @@ import {
   View
 } from "react-native";
 import 'react-native-reanimated';
-import { Meal, useIngredients } from '../ingredientsStore';
+import { Item, Section, useIngredients } from '../ingredientsStore';
 import { COLORS, styles } from '../styles/global_style';
-
-type MealItem = {
-  id: string;
-  title: string;
-  meal: Meal[];
-  open?: boolean;
-};
 
 export default function PlanCheckPage() {
   const scheme = useColorScheme();
@@ -36,6 +29,14 @@ export default function PlanCheckPage() {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setOpen((o) => ({ ...o, [mealId]: !o[mealId] }));
   };
+
+  const [editing, setEditing] = useState<Record<string, boolean>>({});
+  const keyOf = (mealId: string, sectionId: string) => `${mealId}:${sectionId}`;
+
+  const isEditing = (mealId: string, sectionId: string) => !!editing[keyOf(mealId, sectionId)];
+  const toggleEditing = (mealId: string, sectionId: string) =>
+    setEditing(prev => ({ ...prev, [keyOf(mealId, sectionId)]: !prev[keyOf(mealId, sectionId)] }));
+
 
   const [open, setOpen] = useState<Record<string, boolean>>({});
 
@@ -71,7 +72,7 @@ export default function PlanCheckPage() {
           ))}
         </View> */}
 
-        {/* Accordions (Days) */}
+        {/* Accordions (Meals) */}
         <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 12 }}>
           {meals.map((meal) => (
             <View
@@ -111,74 +112,7 @@ export default function PlanCheckPage() {
                     </Text>
                   ) : (
                     meal.sections.map((s) => (
-                      <View key={s.id} style={styles.sectionRow}>
-                        <View style={styles.sectionLeft}>
-                          <View style={{ justifyContent: "center" }}>
-                            <View style={{
-                              justifyContent: "space-between",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              width: "100%",
-                            }}>
-                              <Text
-                                style={[styles.sectionTitle, { color: theme.text }]}
-                                numberOfLines={1}
-                              >
-                                {s.title}
-                              </Text>
-                              <Pressable style={styles.iconBtn}>
-                                <MaterialIcons
-                                  name={"edit"}
-                                  size={22}
-                                  color={theme.text}
-                                />
-                              </Pressable>
-                            </View>
-                            <View style={{ paddingHorizontal: 25 }}>
-                              {s.items.length === 0 ? (
-                                <Text
-                                  style={{
-                                    color: theme.subtext,
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  No items
-                                </Text>
-                              ) : (
-                                s.items.map((i) => (
-                                  <View key={i.id} style={styles.itemsRow}>
-                                    <View style={styles.itemLeft}>
-                                      <View style={{
-                                        justifyContent: "space-between",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        width: "100%",
-                                      }}>
-                                        <Text style={{
-                                          color: theme.subtext,
-                                        }}>
-                                          {i.label}
-                                        </Text>
-                                        <Text style={{
-                                          color: theme.subtext,
-                                        }}>
-                                          {i.baseQty} {i.unit}
-                                        </Text>
-                                      </View>
-                                    </View>
-                                  </View>
-                                ))
-                              )}
-                            </View>
-                          </View>
-                        </View>
-                        {/* <Checkbox
-                          value={!!s.done}
-                          onValueChange={() => toggleMealDone(day.id, m.id)}
-                          color={m.done ? COLORS.primary : undefined}
-                          style={styles.checkbox}
-                        /> */}
-                      </View>
+                      SectionItem(meal.id, s, isDark, isEditing(meal.id, s.id), toggleEditing)
                     ))
                   )}
                 </View>
@@ -187,16 +121,6 @@ export default function PlanCheckPage() {
           ))}
         </View>
       </ScrollView>
-
-      {/* Floating Action Button */}
-      <Pressable
-        onPress={() => {
-          // open edit screen / modal
-        }}
-        style={[styles.fab, { backgroundColor: COLORS.primary }]}
-      >
-        <MaterialIcons name="edit" size={26} color={"black"} />
-      </Pressable>
 
       {/* Bottom bar (static UI; replace with Tabs if you prefer real navigation) */}
       <View
@@ -251,4 +175,85 @@ function withOpacity(hex: string, opacity: number) {
     .toString(16)
     .padStart(2, "0");
   return hex + o;
+}
+
+function SectionItem(mID: string, s: Section, isDark: boolean, isEditing: boolean, toggle:(mid: string, sid: string) => void) {
+  const theme = isDark ? COLORS.dark : COLORS.light;
+
+  return (
+    <View key={s.id} style={styles.sectionRow}>
+      <View style={styles.sectionLeft}>
+        <View style={{ justifyContent: "center" }}>
+          <View style={{
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+          }}>
+            <Text
+              style={[styles.sectionTitle, { color: theme.text }]}
+              numberOfLines={1}
+            >
+              {s.title}
+            </Text>
+            <Pressable style={styles.iconBtn} onPress={() => toggle(mID, s.id)}>
+              <MaterialIcons
+                name={"edit"}
+                size={22}
+                color={theme.text}
+              />
+            </Pressable>
+          </View>
+          <View style={{ paddingHorizontal: 25 }}>
+            {s.items.length === 0 ? (
+              <Text
+                style={{
+                  color: theme.subtext,
+                  textAlign: "center",
+                }}
+              >
+                No items
+              </Text>
+            ) : (
+              s.items.map((i) => (
+                IngredientItem(mID, s.id, i, isDark, isEditing)
+              ))
+            )}
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+function IngredientItem(mID: string, sID: string, i: Item, isDark: boolean, isEditing: boolean) {
+  const theme = isDark ? COLORS.dark : COLORS.light;
+
+  return (
+    <View key={i.id} style={styles.itemsRow}>
+      <View style={styles.itemLeft}>
+        {isEditing ? (
+          <Text> Editing Mode </Text>
+        ) : (
+          <View style={{
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+          }}>
+            <Text style={{
+              color: theme.subtext,
+            }}>
+              {i.label}
+            </Text>
+            <Text style={{
+              color: theme.subtext,
+            }}>
+              {i.baseQty} {i.unit}
+            </Text>
+          </View>
+        )}
+      </View>
+    </View>
+  )
 }
