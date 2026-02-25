@@ -1,0 +1,215 @@
+{
+  "categories": [
+    {
+      "id": "protein",
+      "name": "Proteins",
+      "icon": "egg",
+      "ingredients": [
+        { "id": "chicken_breast", "name": "Chicken Breast", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "chicken_thigh", "name": "Chicken Thigh", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "ground_beef", "name": "Ground Beef", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "beef_steak", "name": "Beef Steak", "defaultUnit": "g", "defaultQty": 200 },
+        { "id": "pork_chop", "name": "Pork Chop", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "pork_tenderloin", "name": "Pork Tenderloin", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "ground_turkey", "name": "Ground Turkey", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "turkey_breast", "name": "Turkey Breast", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "salmon", "name": "Salmon", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "tuna", "name": "Tuna", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "cod", "name": "Cod", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "tilapia", "name": "Tilapia", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "shrimp", "name": "Shrimp", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "eggs", "name": "Eggs", "defaultUnit": "units", "defaultQty": 2 },
+        { "id": "egg_whites", "name": "Egg Whites", "defaultUnit": "ml", "defaultQty": 100 },
+        { "id": "tofu", "name": "Tofu", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "tempeh", "name": "Tempeh", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "bacon", "name": "Bacon", "defaultUnit": "slices", "defaultQty": 3 },
+        { "id": "sausage", "name": "Sausage", "defaultUnit": "g", "defaultQty": 100 }
+      ]
+    },
+    {
+      "id": "vegetables",
+      "name": "Vegetables",
+      "icon": "eco",
+      "ingredients": [
+        { "id": "broccoli", "name": "Broccoli", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "spinach", "name": "Spinach", "defaultUnit": "g", "defaultQty": 50 },
+        { "id": "kale", "name": "Kale", "defaultUnit": "g", "defaultQty": 50 },
+        { "id": "lettuce", "name": "Lettuce", "defaultUnit": "g", "defaultQty": 50 },
+        { "id": "carrots", "name": "Carrots", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "bell_pepper", "name": "Bell Pepper", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "onion", "name": "Onion", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "garlic", "name": "Garlic", "defaultUnit": "cloves", "defaultQty": 2 },
+        { "id": "tomato", "name": "Tomato", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "cucumber", "name": "Cucumber", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "zucchini", "name": "Zucchini", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "asparagus", "name": "Asparagus", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "green_beans", "name": "Green Beans", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "cauliflower", "name": "Cauliflower", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "mushrooms", "name": "Mushrooms", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "celery", "name": "Celery", "defaultUnit": "stalks", "defaultQty": 2 },
+        { "id": "corn", "name": "Corn", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "peas", "name": "Peas", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "cabbage", "name": "Cabbage", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "brussels_sprouts", "name": "Brussels Sprouts", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "eggplant", "name": "Eggplant", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "sweet_potato", "name": "Sweet Potato", "defaultUnit": "g", "defaultQty": 150 }
+      ]
+    },
+    {
+      "id": "fruits",
+      "name": "Fruits",
+      "icon": "nutrition",
+      "ingredients": [
+        { "id": "apple", "name": "Apple", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "banana", "name": "Banana", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "orange", "name": "Orange", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "strawberries", "name": "Strawberries", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "blueberries", "name": "Blueberries", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "raspberries", "name": "Raspberries", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "grapes", "name": "Grapes", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "mango", "name": "Mango", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "pineapple", "name": "Pineapple", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "watermelon", "name": "Watermelon", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "avocado", "name": "Avocado", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "lemon", "name": "Lemon", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "lime", "name": "Lime", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "peach", "name": "Peach", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "pear", "name": "Pear", "defaultUnit": "units", "defaultQty": 1 }
+      ]
+    },
+    {
+      "id": "grains",
+      "name": "Grains & Carbs",
+      "icon": "grass",
+      "ingredients": [
+        { "id": "white_rice", "name": "White Rice", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "brown_rice", "name": "Brown Rice", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "quinoa", "name": "Quinoa", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "oats", "name": "Oats", "defaultUnit": "g", "defaultQty": 50 },
+        { "id": "pasta", "name": "Pasta", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "whole_wheat_pasta", "name": "Whole Wheat Pasta", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "bread", "name": "Bread", "defaultUnit": "slices", "defaultQty": 2 },
+        { "id": "whole_wheat_bread", "name": "Whole Wheat Bread", "defaultUnit": "slices", "defaultQty": 2 },
+        { "id": "tortilla", "name": "Tortilla", "defaultUnit": "units", "defaultQty": 2 },
+        { "id": "couscous", "name": "Couscous", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "bulgur", "name": "Bulgur", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "barley", "name": "Barley", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "potato", "name": "Potato", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "english_muffin", "name": "English Muffin", "defaultUnit": "units", "defaultQty": 1 },
+        { "id": "bagel", "name": "Bagel", "defaultUnit": "units", "defaultQty": 1 }
+      ]
+    },
+    {
+      "id": "dairy",
+      "name": "Dairy",
+      "icon": "local-drink",
+      "ingredients": [
+        { "id": "milk", "name": "Milk", "defaultUnit": "ml", "defaultQty": 200 },
+        { "id": "greek_yogurt", "name": "Greek Yogurt", "defaultUnit": "g", "defaultQty": 150 },
+        { "id": "cottage_cheese", "name": "Cottage Cheese", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "cheddar_cheese", "name": "Cheddar Cheese", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "mozzarella", "name": "Mozzarella", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "parmesan", "name": "Parmesan", "defaultUnit": "g", "defaultQty": 20 },
+        { "id": "cream_cheese", "name": "Cream Cheese", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "butter", "name": "Butter", "defaultUnit": "g", "defaultQty": 15 },
+        { "id": "heavy_cream", "name": "Heavy Cream", "defaultUnit": "ml", "defaultQty": 50 },
+        { "id": "sour_cream", "name": "Sour Cream", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "feta_cheese", "name": "Feta Cheese", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "ricotta", "name": "Ricotta", "defaultUnit": "g", "defaultQty": 60 }
+      ]
+    },
+    {
+      "id": "legumes",
+      "name": "Legumes & Beans",
+      "icon": "grain",
+      "ingredients": [
+        { "id": "black_beans", "name": "Black Beans", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "kidney_beans", "name": "Kidney Beans", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "chickpeas", "name": "Chickpeas", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "lentils", "name": "Lentils", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "edamame", "name": "Edamame", "defaultUnit": "g", "defaultQty": 80 },
+        { "id": "white_beans", "name": "White Beans", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "pinto_beans", "name": "Pinto Beans", "defaultUnit": "g", "defaultQty": 100 },
+        { "id": "hummus", "name": "Hummus", "defaultUnit": "g", "defaultQty": 50 }
+      ]
+    },
+    {
+      "id": "nuts_seeds",
+      "name": "Nuts & Seeds",
+      "icon": "spa",
+      "ingredients": [
+        { "id": "almonds", "name": "Almonds", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "walnuts", "name": "Walnuts", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "cashews", "name": "Cashews", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "peanuts", "name": "Peanuts", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "peanut_butter", "name": "Peanut Butter", "defaultUnit": "tbsp", "defaultQty": 2 },
+        { "id": "almond_butter", "name": "Almond Butter", "defaultUnit": "tbsp", "defaultQty": 2 },
+        { "id": "chia_seeds", "name": "Chia Seeds", "defaultUnit": "g", "defaultQty": 15 },
+        { "id": "flax_seeds", "name": "Flax Seeds", "defaultUnit": "g", "defaultQty": 15 },
+        { "id": "sunflower_seeds", "name": "Sunflower Seeds", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "pumpkin_seeds", "name": "Pumpkin Seeds", "defaultUnit": "g", "defaultQty": 30 },
+        { "id": "hemp_seeds", "name": "Hemp Seeds", "defaultUnit": "g", "defaultQty": 20 },
+        { "id": "sesame_seeds", "name": "Sesame Seeds", "defaultUnit": "g", "defaultQty": 15 }
+      ]
+    },
+    {
+      "id": "oils_fats",
+      "name": "Oils & Fats",
+      "icon": "water-drop",
+      "ingredients": [
+        { "id": "olive_oil", "name": "Olive Oil", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "coconut_oil", "name": "Coconut Oil", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "vegetable_oil", "name": "Vegetable Oil", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "avocado_oil", "name": "Avocado Oil", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "sesame_oil", "name": "Sesame Oil", "defaultUnit": "tsp", "defaultQty": 1 }
+      ]
+    },
+    {
+      "id": "condiments",
+      "name": "Condiments & Sauces",
+      "icon": "local-fire-department",
+      "ingredients": [
+        { "id": "soy_sauce", "name": "Soy Sauce", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "hot_sauce", "name": "Hot Sauce", "defaultUnit": "tsp", "defaultQty": 1 },
+        { "id": "ketchup", "name": "Ketchup", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "mustard", "name": "Mustard", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "mayonnaise", "name": "Mayonnaise", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "salsa", "name": "Salsa", "defaultUnit": "g", "defaultQty": 50 },
+        { "id": "bbq_sauce", "name": "BBQ Sauce", "defaultUnit": "tbsp", "defaultQty": 2 },
+        { "id": "teriyaki_sauce", "name": "Teriyaki Sauce", "defaultUnit": "tbsp", "defaultQty": 2 },
+        { "id": "honey", "name": "Honey", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "maple_syrup", "name": "Maple Syrup", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "vinegar", "name": "Vinegar", "defaultUnit": "tbsp", "defaultQty": 1 },
+        { "id": "balsamic_vinegar", "name": "Balsamic Vinegar", "defaultUnit": "tbsp", "defaultQty": 1 }
+      ]
+    },
+    {
+      "id": "spices",
+      "name": "Spices & Herbs",
+      "icon": "local-florist",
+      "ingredients": [
+        { "id": "salt", "name": "Salt", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "black_pepper", "name": "Black Pepper", "defaultUnit": "tsp", "defaultQty": 0.25 },
+        { "id": "paprika", "name": "Paprika", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "cumin", "name": "Cumin", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "oregano", "name": "Oregano", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "basil", "name": "Basil", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "thyme", "name": "Thyme", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "rosemary", "name": "Rosemary", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "cilantro", "name": "Cilantro", "defaultUnit": "g", "defaultQty": 10 },
+        { "id": "parsley", "name": "Parsley", "defaultUnit": "g", "defaultQty": 10 },
+        { "id": "ginger", "name": "Ginger", "defaultUnit": "g", "defaultQty": 10 },
+        { "id": "turmeric", "name": "Turmeric", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "cinnamon", "name": "Cinnamon", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "chili_powder", "name": "Chili Powder", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "garlic_powder", "name": "Garlic Powder", "defaultUnit": "tsp", "defaultQty": 0.5 },
+        { "id": "onion_powder", "name": "Onion Powder", "defaultUnit": "tsp", "defaultQty": 0.5 }
+      ]
+    }
+  ],
+  "customCategory": {
+    "id": "custom",
+    "name": "Custom",
+    "icon": "add-circle"
+  }
+}

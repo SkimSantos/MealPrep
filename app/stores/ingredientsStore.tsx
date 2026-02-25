@@ -1,6 +1,6 @@
-// lib/ingredientsStore.ts
+// lib/ingredientsStore.tsx
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useRef, useState } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 /** ----- Types ----- */
 export type Item = {
@@ -9,6 +9,7 @@ export type Item = {
   checked: boolean;
   baseQty?: number;
   unit?: string;
+  weight?: number; // proportional weight for calculation
 };
 
 export type Section = {
@@ -27,6 +28,25 @@ type PersistedState = {
   meals: Meal[];
 };
 
+type IngredientsContextType = {
+  ready: boolean;
+  meals: Meal[];
+  addMeal: (meal: Meal) => void;
+  removeMeal: (mealId: string) => void;
+  renameMeal: (mealId: string, title: string) => void;
+  addSection: (mealId: string, section: Section) => void;
+  removeSection: (mealId: string, sectionId: string) => void;
+  renameSection: (mealId: string, sectionId: string, title: string) => void;
+  addItem: (mealId: string, sectionId: string, item: Item) => void;
+  removeItem: (mealId: string, sectionId: string, itemId: string) => void;
+  updateItem: (mealId: string, sectionId: string, itemId: string, patch: Partial<Item>) => void;
+  resetMeals: () => void;
+  clearMealContents: () => void;
+  toggleItem: (mealId: string, sectionId: string, itemId: string) => void;
+};
+
+const IngredientsContext = createContext<IngredientsContextType | null>(null);
+
 const STORAGE_KEY = "@ingredients_state_v2";
 
 /** ----- Defaults ----- */
@@ -34,26 +54,7 @@ const DEFAULT_MEALS: Meal[] = [
   {
     id: "Breakfast",
     title: "Breakfast",
-    sections: [
-      {
-        id: "selection1",
-        title: "Selection 1",
-        items: [
-          { id: "broccoli", label: "Broccoli Florets", checked: false, baseQty: 2, unit: "cups" },
-          { id: "carrots", label: "Sliced Carrots", checked: false, baseQty: 1, unit: "cup" },
-          { id: "onion", label: "Diced Onion", checked: false, baseQty: 0.5, unit: "cup" },
-        ],
-      },
-      {
-        id: "selection2",
-        title: "Selection 2",
-        items: [
-          { id: "broccoli", label: "Broccoli Florets", checked: false, baseQty: 2, unit: "cups" },
-          { id: "carrots", label: "Sliced Carrots", checked: false, baseQty: 1, unit: "cup" },
-          { id: "onion", label: "Diced Onion", checked: false, baseQty: 0.5, unit: "cup" },
-        ],
-      },
-    ],
+    sections: [],
   },
   {
     id: "Lunch",
@@ -97,17 +98,14 @@ async function saveState(state: PersistedState) {
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-/** ----- Hook API ----- */
-export function useIngredients() {
+/** ----- Provider Component ----- */
+export function IngredientsProvider({ children }: { children: ReactNode }) {
   const [meals, setMeals] = useState<Meal[]>(DEFAULT_STATE.meals);
   const [ready, setReady] = useState(false);
-
-  // NEW: hydration + first-save guard
   const [hydrated, setHydrated] = useState(false);
   const isHydratingRef = useRef(true);
   const hasEverSavedRef = useRef(false);
 
-  // 1) Load once (even if StrictMode remounts, we guard saves)
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -116,38 +114,21 @@ export function useIngredients() {
       if (!alive) return;
       setMeals(s.meals);
       setHydrated(true);
+      setReady(true);
       isHydratingRef.current = false;
     })();
     return () => { alive = false; };
   }, []);
 
-  // 2) Auto-save ONLY after hydrated, and NEVER while hydrating
   useEffect(() => {
-    if (!hydrated) return;           // not hydrated yet
-    if (isHydratingRef.current) return; // actively hydrating
-    // Optional: avoid saving immediately after hydration once (helps with StrictMode double mount)
+    if (!hydrated) return;
+    if (isHydratingRef.current) return;
     if (!hasEverSavedRef.current) {
       hasEverSavedRef.current = true;
       return;
     }
     void saveState({ meals });
-  }, [hydrated, meals ]);
-
-
-  // initial load
-  useEffect(() => {
-    (async () => {
-      const s = await loadState();
-      setMeals(s.meals);
-      setReady(true);
-    })();
-  }, []);
-
-  // auto-save
-  useEffect(() => {
-    if (!ready) return;
-    void saveState({ meals });
-  }, [ready, meals]);
+  }, [hydrated, meals]);
 
   /** ---- meal mutations ---- */
   const addMeal = (meal: Meal) => setMeals(prev => [...prev, meal]);
@@ -224,28 +205,41 @@ export function useIngredients() {
 
     const resetMeals = () => setMeals(DEFAULT_STATE.meals);
 
-  const toggleItem = (mealId: string, sectionId: string, itemId: string) =>
-    updateItem(mealId, sectionId, itemId, {});
+  const clearMealContents = () => setMeals(prev => 
+    prev.map(m => ({ ...m, sections: [] }))
+  );
 
-  return {
-    ready,
-    meals,
-    // meal CRUD
-    addMeal,
-    removeMeal,
-    renameMeal,
-    // section CRUD
-    addSection,
-    removeSection,
-    renameSection,
-    // item CRUD
-    addItem,
-    removeItem,
-    updateItem,
-    resetMeals,
-    toggleItem: (mealId: string, sectionId: string, itemId: string) =>
-      updateItem(mealId, sectionId, itemId, { checked: !getItemChecked(meals, mealId, sectionId, itemId) }),
-  };
+  const toggleItem = (mealId: string, sectionId: string, itemId: string) =>
+    updateItem(mealId, sectionId, itemId, { checked: !getItemChecked(meals, mealId, sectionId, itemId) });
+
+  return (
+    <IngredientsContext.Provider value={{
+      ready,
+      meals,
+      addMeal,
+      removeMeal,
+      renameMeal,
+      addSection,
+      removeSection,
+      renameSection,
+      addItem,
+      removeItem,
+      updateItem,
+      resetMeals,
+      clearMealContents,
+      toggleItem,
+    }}>
+      {children}
+    </IngredientsContext.Provider>
+  );
+}
+
+export function useIngredients(): IngredientsContextType {
+  const ctx = useContext(IngredientsContext);
+  if (!ctx) {
+    throw new Error("useIngredients must be used within an IngredientsProvider");
+  }
+  return ctx;
 }
 
 // small helper to read current checked
@@ -261,4 +255,36 @@ export function scaleQty(baseQty: number | undefined, servings: number, baseServ
   const scaled = +(baseQty * (servings / baseServings)).toFixed(2);
   const s = String(scaled);
   return s.includes(".") ? s.replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1") : s;
+}
+
+/**
+ * Calculate proportional quantity for selected items in a section.
+ * Uses weight field for proportional distribution.
+ * @param items - all items in the section
+ * @param itemId - the specific item to calculate qty for
+ * @returns formatted quantity string with unit
+ */
+export function calculateProportionalQty(items: Item[], itemId: string): string {
+  const selectedItems = items.filter(i => i.checked);
+  const item = items.find(i => i.id === itemId);
+  
+  if (!item || !item.checked || !item.baseQty) return "";
+  
+  // Calculate total weight of selected items
+  const totalWeight = selectedItems.reduce((sum, i) => sum + (i.weight ?? 1), 0);
+  
+  // Guard against division by zero
+  if (totalWeight === 0) return "";
+  
+  const itemWeight = item.weight ?? 1;
+  
+  // Proportional calculation: (itemWeight / totalWeight) * baseQty
+  // This distributes the base quantity proportionally
+  const proportionalQty = (itemWeight / totalWeight) * item.baseQty;
+  const scaled = +proportionalQty.toFixed(2);
+  
+  const s = String(scaled);
+  const qty = s.includes(".") ? s.replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1") : s;
+  
+  return `${qty} ${item.unit ?? ""}`.trim();
 }

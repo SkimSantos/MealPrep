@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <metadata>
+        <name>MealPrep</name>
+        <version>1.0.0</version>
+        <description>A React Native Expo application for meal planning, grocery management, and nutritional tracking</description>
+        <framework>React Native with Expo 54</framework>
+        <language>TypeScript</language>
+        <buildTool>Expo</buildTool>
+    </metadata>
+
+    <overview>
+        <purpose>
+            MealPrep is a comprehensive meal planning and grocery management application that helps users:
+            - Plan meals across breakfast, lunch, dinner, and snacks
+            - Track ingredients with proportional quantity calculations
+            - Manage grocery shopping lists
+            - Log meal history with nutritional details
+            - Set personal nutritional goals
+            - Support dark/light theme with system preference detection
+        </purpose>
+
+        <keyFeatures>
+            <feature>
+                <name>Meal Planning</name>
+                <description>Create and organize meals into sections with individual ingredient items. Each meal can have multiple sections and items with customizable quantities, units, and proportional weights.</description>
+                <files>
+                    <file>app/stores/ingredientsStore.tsx</file>
+                    <file>app/tabs/plan/index.tsx</file>
+                </files>
+            </feature>
+            <feature>
+                <name>Meal Selection</name>
+                <description>Visual interface to select meals and ingredients from predefined meal plans. Includes ingredient picker with 9+ categories and 100+ ingredients.</description>
+                <files>
+                    <file>app/tabs/meal_selection/index.tsx</file>
+                    <file>app/data/ingredients.json</file>
+                </files>
+            </feature>
+            <feature>
+                <name>Grocery Management</name>
+                <description>Create and manage shopping lists with item names, quantities, units, and checklist functionality.</description>
+                <files>
+                    <file>app/stores/groceriesStore.ts</file>
+                    <file>app/tabs/groceries/index.tsx</file>
+                </files>
+            </feature>
+            <feature>
+                <name>History Tracking</name>
+                <description>Log consumed meals with date, meal type, ingredients, and personal notes. View historical meal data.</description>
+                <files>
+                    <file>app/stores/historyStore.tsx</file>
+                    <file>app/tabs/history/index.tsx</file>
+                </files>
+            </feature>
+            <feature>
+                <name>User Profile</name>
+                <description>Store and manage user information including name, age, weight, height, and daily nutritional goals (calories, protein, carbs, fat).</description>
+                <files>
+                    <file>app/stores/profileStore.tsx</file>
+                    <file>app/tabs/profile/index.tsx</file>
+                </files>
+            </feature>
+            <feature>
+                <name>Theme System</name>
+                <description>Support for light and dark modes with system preference detection and user override options.</description>
+                <files>
+                    <file>app/hooks/useTheme.ts</file>
+                    <file>app/styles/global_style.ts</file>
+                    <file>constants/theme.ts</file>
+                </files>
+            </feature>
+            <feature>
+                <name>Modal Panels</name>
+                <description>Global modal management system for ingredient pickers, confirmations, and other overlay components.</description>
+                <files>
+                    <file>app/components/PanelContext.tsx</file>
+                    <file>app/components/ConfirmationModal.tsx</file>
+                </files>
+            </feature>
+        </keyFeatures>
+    </overview>
+
+    <architecture>
+        <pattern name="State Management">
+            <description>React Context API with AsyncStorage persistence for global application state</description>
+            <implementation>
+                - ProfileProvider: User profile and settings
+                - IngredientsProvider: Meal planning state
+                - HistoryProvider: Meal history tracking
+                - useGroceries hook: Grocery list management
+                - PanelProvider: Modal/panel state management
+            </implementation>
+            <persistence>
+                All providers implement a hydration pattern:
+                1. Load state from AsyncStorage on mount
+                2. Skip first save after hydration (hasEverSavedRef)
+                3. Save any subsequent state changes
+                4. Handle cleanup with alive flag for unmounted components
+            </persistence>
+        </pattern>
+
+        <pattern name="Component Architecture">
+            <description>Hierarchical component structure with providers at root and screens in tabs</description>
+            <hierarchy>
+                RootLayout (_layout.tsx)
+                  └─ MainScreen (main_screen.tsx)
+                     ├─ ProfileProvider
+                     ├─ IngredientsProvider
+                     ├─ HistoryProvider
+                     ├─ PanelProvider
+                     └─ BottomTabNavigator
+                        ├─ PlanTab
+                        ├─ MealSelectionTab
+                        ├─ GroceriesTab
+                        ├─ HistoryTab
+                        └─ ProfileTab
+            </hierarchy>
+        </pattern>
+
+        <pattern name="Data Persistence">
+            <description>AsyncStorage-based persistence with context providers</description>
+            <storageKeys>
+                - @profile_state_v1: User profile
+                - @ingredients_state_v2: Meal planning data
+                - @history_state_v1: Meal history
+                - @groceries_state_v1: Grocery list
+            </storageKeys>
+        </pattern>
+
+        <pattern name="Routing">
+            <description>File-based routing with Expo Router</description>
+            <routes>
+                / - Root layout with tab navigation
+                /plan - Meal planning screen
+                /meal_selection - Visual meal selector
+                /groceries - Grocery management
+                /history - Meal history viewer
+                /profile - User profile settings
+            </routes>
+        </pattern>
+    </architecture>
+
+    <dataFlow>
+        <flow name="Meal Planning Workflow">
+            <step>1. User navigates to Plan tab</step>
+            <step>2. Ingredient Picker modal opens with 9 ingredient categories</step>
+            <step>3. User selects ingredient and quantity</step>
+            <step>4. Ingredient added to meal section with proportional weight</step>
+            <step>5. State updated in IngredientsProvider</step>
+            <step>6. Changes automatically persisted to AsyncStorage</step>
+        </flow>
+
+        <flow name="Meal Selection Workflow">
+            <step>1. User navigates to Meal Selection tab</step>
+            <step>2. User selects breakfast, lunch, dinner, or snacks</step>
+            <step>3. Ingredient Selector shows available items</step>
+            <step>4. User toggles ingredients to include in meal</step>
+            <step>5. Confirmation dialog created to log meal</step>
+            <step>6. Meal logged to HistoryProvider with timestamp</step>
+            <step>7. Checked items cleared from IngredientsProvider</step>
+        </flow>
+
+        <flow name="Grocery Management Workflow">
+            <step>1. User navigates to Groceries tab</step>
+            <step>2. Add Item panel opens</step>
+            <step>3. User enters item name, quantity, and unit</step>
+            <step>4. Item added to GroceriesStore</step>
+            <step>5. User can check items off as purchased</step>
+            <step>6. Clear Checked removes completed items from list</step>
+        </flow>
+    </dataFlow>
+
+    <dependencies>
+        <core>
+            <dependency name="react-native" version="0.76.x">React Native framework</dependency>
+            <dependency name="expo" version="54.x">Expo platform</dependency>
+            <dependency name="react" version="18.x">React library</dependency>
+            <dependency name="typescript" version="5.x">Type checking</dependency>
+        </core>
+        <navigation>
+            <dependency name="expo-router">File-based routing</dependency>
+            <dependency name="react-navigation">Navigation framework</dependency>
+            <dependency name="react-native-screens">Navigation screens</dependency>
+            <dependency name="react-native-safe-area-context">Safe area handling</dependency>
+        </navigation>
+        <storage>
+            <dependency name="@react-native-async-storage/async-storage">Persistent storage</dependency>
+        </storage>
+        <ui>
+            <dependency name="react-native-vector-icons">Material icons and other icon sets</dependency>
+            <dependency name="react-native-reanimated">Animation library</dependency>
+        </ui>
+        <dev>
+            <dependency name="eslint">Code linting</dependency>
+            <dependency name="@typescript-eslint/eslint-plugin">TypeScript linting</dependency>
+        </dev>
+    </dependencies>
+
+    <projectStructure>
+        <directory name="app">
+            <description>Main application source code</description>
+            <subdirectories>
+                <dir name="stores">Global state management providers and hooks</dir>
+                <dir name="tabs">Screen components for each tab (plan, meal_selection, groceries, history, profile)</dir>
+                <dir name="components">Shared components (PanelContext, ConfirmationModal)</dir>
+                <dir name="hooks">Custom React hooks (useTheme, useTheme-related)</dir>
+                <dir name="styles">StyleSheet definitions and theme configuration</dir>
+                <dir name="data">Static data files (ingredients.json)</dir>
+            </subdirectories>
+            <files>
+                <file name="_layout.tsx">Root navigation layout configuration</file>
+                <file name="main_screen.tsx">Provider setup and bottom tab navigation</file>
+            </files>
+        </directory>
+        <directory name="components">
+            <description>Shared UI components and utilities</description>
+            <items>
+                <item>themed-text.tsx - Theme-aware text wrapper</item>
+                <item>themed-view.tsx - Theme-aware view wrapper</item>
+                <item>parallax-scroll-view.tsx - Custom scroll view with parallax effect</item>
+                <item>ui/ - UI primitives (collapsible, icon-symbol, etc.)</item>
+            </items>
+        </directory>
+        <directory name="hooks">
+            <description>Global custom hooks</description>
+            <items>
+                <item>use-color-scheme.ts - Platform color scheme detection</item>
+                <item>use-theme-color.ts - Theme color provider hook</item>
+            </items>
+        </directory>
+        <directory name="constants">
+            <description>Application-wide constants</description>
+            <items>
+                <item>theme.ts - Color palette and theme definitions</item>
+            </items>
+        </directory>
+        <directory name="assets">
+            <description>Images, icons, and other static media</description>
+        </directory>
+        <directory name="docs">
+            <description>Project documentation in XML format</description>
+        </directory>
+    </projectStructure>
+
+    <buildAndRun>
+        <scripts>
+            <script name="npm run lint">Run ESLint to check code quality</script>
+            <script name="npm run dev">Start Expo development server</script>
+            <script name="npm run ios">Build and run on iOS simulator</script>
+            <script name="npm run android">Build and run on Android emulator</script>
+            <script name="npm run build">Build the app for production</script>
+        </scripts>
+        <environment>
+            <requirement name="Node.js">v18 or higher</requirement>
+            <requirement name="npm">v8 or higher</requirement>
+            <requirement name="Expo CLI">Latest version recommended</requirement>
+        </environment>
+    </buildAndRun>
+
+    <conventions>
+        <naming>
+            <rule>Components and providers use PascalCase (e.g., ProfileProvider, ConfirmationModal)</rule>
+            <rule>Hooks use camelCase with 'use' prefix (e.g., useProfile, useTheme, useGroceries)</rule>
+            <rule>Files follow kebab-case for multi-word files (e.g., panel-context.tsx, global_style.ts)</rule>
+            <rule>Types and interfaces use PascalCase (e.g., UserProfile, HistoryEntry, Item)</rule>
+            <rule>Constants use UPPER_SNAKE_CASE (e.g., STORAGE_KEY, COLORS)</rule>
+        </naming>
+        <structure>
+            <rule>Each store file includes types, context, storage functions, provider, and hook in that order</rule>
+            <rule>Providers implement hydration pattern with isHydratingRef and hasEverSavedRef</rule>
+            <rule>All AsyncStorage operations are wrapped in try-catch blocks</rule>
+            <rule>UI components use theme colors from COLORS constant</rule>
+        </structure>
+        <codeStyle>
+            <rule>Use arrow functions for component and function definitions</rule>
+            <rule>Immutable state updates using spread operator and array methods</rule>
+            <rule>StyleSheet.create() for all style definitions</rule>
+            <rule>Comments for complex logic or non-obvious functionality</rule>
+        </codeStyle>
+    </conventions>
+
+    <notes>
+        <note>ID generation uses Date.now() with random suffix to prevent collisions: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`</note>
+        <note>Proportional quantity calculation divides by totalWeight of selected items with zero-check guard</note>
+        <note>AsyncStorage hydration prevents saving incomplete data during initial load</note>
+        <note>PanelContext supports both state and data passing for modals</note>
+        <note>useTheme hook respects system theme but allows user override</note>
+    </notes>
+</project>

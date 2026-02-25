@@ -6,12 +6,12 @@ import {
   Platform,
   Pressable,
   Text,
-  useColorScheme,
   View
 } from "react-native";
+import { useTheme } from '../hooks/useTheme';
 import { COLORS, styles } from '../styles/global_style';
 
-import { useIngredients } from "../ingredientsStore";
+import { useIngredients } from "../stores/ingredientsStore";
 
 type Item = { id: string; label: string; checked: boolean; baseQty?: number; unit?: string };
 type Section = { id: string; title: string; items: Item[] };
@@ -23,10 +23,7 @@ type mealProps = {
 
 export default function IngredientListPage(props: mealProps) {
   const { mealId } = useLocalSearchParams<{ mealId: string }>();
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
-
-  const theme = isDark ? COLORS.dark : COLORS.light;
+  const { isDark, theme } = useTheme();
 
   const {
     ready,

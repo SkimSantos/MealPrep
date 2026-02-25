@@ -1,128 +1,178 @@
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import * as NavigationBar from 'expo-navigation-bar';
 import React from 'react';
 import {
+    Platform,
     StatusBar,
     Text,
     TouchableOpacity,
-    useColorScheme,
     View
 } from "react-native";
 import 'react-native-reanimated';
 import Icon from "react-native-vector-icons/MaterialIcons";
-import GroceriesPage from "./tabs/groceries_page";
-import MealPlannerHome from './tabs/meal_plan';
-import PlanCheckPage from './tabs/plan_check_page';
-import ProfilePage from "./tabs/profile_page";
+import { PanelProvider } from "./components/PanelContext";
+import { useTheme } from "./hooks/useTheme";
+import { HistoryProvider } from "./stores/historyStore";
+import { IngredientsProvider } from "./stores/ingredientsStore";
+import { ProfileProvider } from "./stores/profileStore";
+import GroceriesTab from "./tabs/groceries";
+import HistoryTab from "./tabs/history";
+import MealSelectionTab from './tabs/meal_selection';
+import PlanTab from './tabs/plan';
+import ProfileTab from "./tabs/profile";
 
 
 import { COLORS, styles } from './styles/global_style';
 
 const Tab = createBottomTabNavigator();
 
+// Hide system navigation bar on Android with immersive mode
+async function hideNavigationBar() {
+  if (Platform.OS === 'android') {
+    await NavigationBar.setVisibilityAsync('hidden');
+    await NavigationBar.setBehaviorAsync('inset-swipe');
+  }
+}
+
+// Initial hide
+hideNavigationBar();
+
+// Re-hide when visibility changes (user swipes to show it)
+if (Platform.OS === 'android') {
+  NavigationBar.addVisibilityListener(({ visibility }) => {
+    if (visibility === 'visible') {
+      // Auto-hide after 2 seconds
+      setTimeout(() => {
+        hideNavigationBar();
+      }, 2000);
+    }
+  });
+}
+
 export default function MainScreen() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  return (
+    <ProfileProvider>
+      <IngredientsProvider>
+        <HistoryProvider>
+          <PanelProvider>
+            <MainContent />
+          </PanelProvider>
+        </HistoryProvider>
+      </IngredientsProvider>
+    </ProfileProvider>
+  );
+}
+
+function MainContent() {
+  const { isDark } = useTheme();
 
   const bg = isDark ? COLORS.backgroundDark : COLORS.backgroundLight;
   const text = isDark ? COLORS.textLight : COLORS.textDark;
 
   return (
-    <View style={[styles.safe, { backgroundColor: bg }]}>
-      <StatusBar
-        barStyle={isDark ? "light-content" : "dark-content"}
-        backgroundColor={bg}
-        hidden
-      />
-      <View style={[styles.container, { backgroundColor: bg }]}>
-        {/* Top App Bar */}
-        <View style={styles.topBarWrap}>
-          <View style={styles.topBar}>
-            <View style={styles.logoWrap}>
-              <Icon name="restaurant-menu" size={28} color={COLORS.primary} />
+      <View style={[styles.safe, { backgroundColor: bg }]}>
+        <StatusBar
+          barStyle={isDark ? "light-content" : "dark-content"}
+          backgroundColor={bg}
+          hidden
+        />
+        <View style={[styles.container, { backgroundColor: bg }]}>
+          {/* Top App Bar */}
+          <View style={styles.topBarWrap}>
+            <View style={styles.topBar}>
+              <View style={styles.logoWrap}>
+                <Icon name="restaurant-menu" size={28} color={COLORS.primary} />
+              </View>
+              <TouchableOpacity style={styles.avatarBtn} activeOpacity={0.8}>
+                <Icon
+                  name="account-circle"
+                  size={30}
+                  color={isDark ? COLORS.textLight : COLORS.textDark}
+                />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.avatarBtn} activeOpacity={0.8}>
-              <Icon
-                name="account-circle"
-                size={30}
-                color={isDark ? COLORS.textLight : COLORS.textDark}
-              />
-            </TouchableOpacity>
+            <Text
+              style={[
+                styles.title,
+                { color: text },
+              ]}
+            >
+              What are you eating today?
+            </Text>
           </View>
-          <Text
-            style={[
-              styles.title,
-              { color: text },
-            ]}
+
+          <Tab.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+            tabBar={(props) => <MyBottomBar {...props} />}
           >
-            What are you planning today?
-          </Text>
+            <Tab.Screen
+              name="Meals"
+              component={MealSelectionTab}
+              options={{ tabBarLabel: "Meals" }}
+            />
+            <Tab.Screen
+              name="Plan"
+              component={PlanTab}
+              options={{ tabBarLabel: "Plan" }}
+            />
+            <Tab.Screen
+              name="History"
+              component={HistoryTab}
+              options={{ tabBarLabel: "History" }}
+            />
+            <Tab.Screen
+              name="Groceries"
+              component={GroceriesTab}
+              options={{ tabBarLabel: "Groceries" }}
+            />
+            <Tab.Screen
+              name="Profile"
+              component={ProfileTab}
+              options={{ tabBarLabel: "Profile" }}
+            />
+          </Tab.Navigator>
         </View>
-
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false,// <- ensures state doesn't persist when switching tabs
-          }}
-          // Plug in YOUR bottom bar component:
-          tabBar={(props) => <MyBottomBar {...props} isDark={isDark} bg={bg} />}
-        >
-          <Tab.Screen
-            name="Home"
-            component={MealPlannerHome}
-            options={{ tabBarLabel: "Home" }}
-          />
-          <Tab.Screen
-            name="MyPlan"
-            component={PlanCheckPage}
-            options={{ tabBarLabel: "My Plan" }}
-          />
-          <Tab.Screen
-            name="Groceries"
-            component={GroceriesPage}
-            options={{ tabBarLabel: "Groceries" }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={ProfilePage}
-            options={{ tabBarLabel: "Profile" }}
-          />
-
-        </Tab.Navigator>
       </View>
-    </View>
   );
 }
 
 const ICONS: Record<string, string> = {
-  Home: "home",
-  MyPlan: "calendar-month",
+  Meals: "restaurant",
+  Plan: "calendar-month",
+  History: "history",
   Groceries: "shopping-cart",
-  Settings: "settings",
+  Profile: "person",
 };
 
 function NavItem({
   label,
   icon,
   active,
+  isDark,
   onPress,
 }: {
   label: string;
   icon: string;
   active?: boolean;
+  isDark: boolean;
   onPress: () => void;
 }) {
+  const inactiveColor = isDark ? "rgba(246,248,247,0.5)" : "rgba(18,32,23,0.5)";
   return (
     <TouchableOpacity style={styles.navItem} activeOpacity={0.8} onPress={onPress}>
       <View style={styles.navIconBox}>
         <Icon
           name={icon as any}
           size={24}
-          color={active ? COLORS.primary : "rgba(246,248,247,0.5)"}
+          color={active ? COLORS.primary : inactiveColor}
         />
       </View>
       <Text
         style={[
           styles.navLabel,
-          { color: active ? COLORS.primary : "rgba(246,248,247,0.5)" },
+          { color: active ? COLORS.primary : inactiveColor },
         ]}
       >
         {label}
@@ -133,10 +183,10 @@ function NavItem({
 
 /** Your bottom bar, wired to React Navigation */
 function MyBottomBar(
-  { state, descriptors, navigation }: BottomTabBarProps & { isDark: boolean; bg: string }
+  { state, descriptors, navigation }: BottomTabBarProps
 ) {
-  const isDark = (arguments[0] as any).isDark; // (TS shortcut in snippet)
-  const bg = (arguments[0] as any).bg;
+  const { isDark } = useTheme();
+  const bg = isDark ? COLORS.backgroundDark : COLORS.backgroundLight;
 
   return (
     <View
@@ -154,7 +204,7 @@ function MyBottomBar(
           options.tabBarLabel !== undefined
             ? (options.tabBarLabel as string)
             : options.title ?? route.name;
-        const icon = ICONS[route.name] ?? "circle"; // 👈 get icon by route name
+        const icon = ICONS[route.name] ?? "circle";
         const active = state.index === index;
 
         const onPress = () => {
@@ -174,6 +224,7 @@ function MyBottomBar(
             label={label}
             icon={icon ?? "circle"}
             active={active}
+            isDark={isDark}
             onPress={onPress}
           />
         );

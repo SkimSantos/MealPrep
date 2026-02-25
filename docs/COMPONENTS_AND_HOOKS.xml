@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+    <description>Shared UI components and context providers for application-wide functionality</description>
+
+    <component name="PanelContext">
+        <file>app/components/PanelContext.tsx</file>
+        <purpose>
+            Global context-based system for managing modal panels and overlays.
+            Provides state management and data passing for any number of panels/modals.
+        </purpose>
+
+        <types>
+            <type name="PanelState">
+                <description>Record mapping panel IDs to their open/closed status</description>
+                <example>
+                    {
+                        ingredientPicker: true,
+                        confirmDialog: false,
+                        customIngredient: true
+                    }
+                </example>
+            </type>
+
+            <type name="PanelContextType">
+                <description>Context API type for panel state and methods</description>
+                <fields>
+                    <field name="panels" type="Record&lt;string, boolean&gt;">Current panel states</field>
+                    <field name="isPanelOpen" type="function">Check if specific panel is open</field>
+                    <field name="openPanel" type="function">Open panel with optional data</field>
+                    <field name="closePanel" type="function">Close panel</field>
+                    <field name="togglePanel" type="function">Toggle panel open/closed</field>
+                    <field name="setPanelData" type="function">Set data for panel</field>
+                    <field name="getPanelData" type="function">Get data for panel</field>
+                </fields>
+            </type>
+        </types>
+
+        <functions>
+            <function name="PanelProvider" kind="component">
+                <signature>function PanelProvider({ children }: PanelProviderProps): JSX.Element</signature>
+                <description>Context provider for panel management</description>
+                <props>
+                    <prop name="children" type="ReactNode">Child components</prop>
+                </props>
+                <behavior>
+                    1. Maintain panels state (Record of panel id → boolean)
+                    2. Maintain panelData state (Record of panel id → any data)
+                    3. Provide context with all panel operations
+                    4. Allow opening/closing panels and passing data
+                </behavior>
+                <state>
+                    - panels: Object tracking which panels are open
+                    - panelData: Object storing data for each panel
+                </state>
+                <example>
+                    &lt;PanelProvider&gt;
+                        &lt;YourAppContent /&gt;
+                    &lt;/PanelProvider&gt;
+                </example>
+            </function>
+
+            <function name="isPanelOpen">
+                <signature>(panelId: string) =&gt; boolean</signature>
+                <description>Check if a specific panel is currently open</description>
+                <parameters>
+                    <param name="panelId" type="string">Unique panel identifier</param>
+                </parameters>
+                <returns type="boolean">True if panel is open, false otherwise</returns>
+                <example>
+                    if (isPanelOpen('ingredientPicker')) {
+                        // Panel is open
+                    }
+                </example>
+            </function>
+
+            <function name="openPanel">
+                <signature>(panelId: string, data?: any) =&gt; void</signature>
+                <description>Open a panel and optionally pass data to it</description>
+                <parameters>
+                    <param name="panelId" type="string">Unique panel identifier</param>
+                    <param name="data" type="any | undefined">Optional data to pass to panel (optional)</param>
+                </parameters>
+                <behavior>
+                    1. Set panels[panelId] to true
+                    2. If data provided, set panelData[panelId] to data
+                    3. Component re-renders with updated state
+                </behavior>
+                <example>
+                    openPanel('ingredientPicker', { category: 'proteins', mealId: 'breakfast' })
+                </example>
+            </function>
+
+            <function name="closePanel">
+                <signature>(panelId: string) =&gt; void</signature>
+                <description>Close a panel</description>
+                <parameters>
+                    <param name="panelId" type="string">Unique panel identifier</param>
+                </parameters>
+                <behavior>
+                    1. Set panels[panelId] to false
+                    2. Panel is hidden but data may remain in panelData
+                </behavior>
+                <example>
+                    closePanel('ingredientPicker')
+                </example>
+            </function>
+
+            <function name="togglePanel">
+                <signature>(panelId: string) =&gt; void</signature>
+                <description>Toggle panel open/closed state</description>
+                <parameters>
+                    <param name="panelId" type="string">Unique panel identifier</param>
+                </parameters>
+                <behavior>
+                    1. Invert panels[panelId] boolean value
+                    2. Opens if closed, closes if open
+                </behavior>
+            </function>
+
+            <function name="setPanelData">
+                <signature>(panelId: string, data: any) =&gt; void</signature>
+                <description>Store data for a panel (doesn't affect panel open/closed state)</description>
+                <parameters>
+                    <param name="panelId" type="string">Unique panel identifier</param>
+                    <param name="data" type="any">Data to store</param>
+                </parameters>
+                <behavior>
+                    1. Set panelData[panelId] to provided data
+                    2. Useful for updating panel data without opening/closing
+                </behavior>
+                <example>
+                    setPanelData('ingredientPicker', { selectedCategory: 'vegetables' })
+                </example>
+            </function>
+
+            <function name="getPanelData">
+                <signature>(panelId: string) =&gt; any</signature>
+                <description>Retrieve data for a panel</description>
+                <parameters>
+                    <param name="panelId" type="string">Unique panel identifier</param>
+                </parameters>
+                <returns type="any">Data stored for the panel or undefined</returns>
+                <example>
+                    const data = getPanelData('ingredientPicker')
+                    // Returns: { category: 'proteins', mealId: 'breakfast' }
+                </example>
+            </function>
+
+            <function name="usePanels" kind="hook">
+                <signature>function usePanels(): PanelContextType</signature>
+                <description>Hook to access panel context</description>
+                <returns type="PanelContextType">Panel context value with all operations</returns>
+                <throws>Error if used outside PanelProvider</throws>
+                <example>
+                    const { openPanel, closePanel, isPanelOpen } = usePanels();
+                    
+                    const handleOpenIngredients = () =&gt; {
+                        openPanel('ingredientPicker');
+                    };
+                </example>
+            </function>
+        </functions>
+
+        <usage>
+            <requirement>Wrap your app root with PanelProvider</requirement>
+            <example>
+                export function App() {
+                    return (
+                        &lt;PanelProvider&gt;
+                            &lt;YourAppTabs /&gt;
+                        &lt;/PanelProvider&gt;
+                    );
+                }
+            </example>
+            <panelExample>
+                // In a screen component
+                const { openPanel, closePanel, isPanelOpen, getPanelData } = usePanels();
+                
+                const handleAddIngredient = () =&gt; {
+                    openPanel('ingredientPicker', { sectionId: 'proteins' });
+                };
+                
+                const handleConfirm = () =&gt; {
+                    const data = getPanelData('ingredientPicker');
+                    console.log(data.sectionId); // 'proteins'
+                    closePanel('ingredientPicker');
+                };
+            </panelExample>
+        </usage>
+
+        <notes>
+            <note>Panels can be opened with or without data</note>
+            <note>Multiple panels can be open simultaneously</note>
+            <note>Data persists even after panel is closed (until explicitly cleared)</note>
+            <note>No built-in animations; animations handled by modal/overlay component</note>
+        </notes>
+    </component>
+
+    <component name="ConfirmationModal">
+        <file>app/components/ConfirmationModal.tsx</file>
+        <purpose>
+            Reusable modal component for confirmation dialogs, deletions, and important user actions.
+            Supports both standard and destructive (warning) modes with customizable button text.
+        </purpose>
+
+        <props>
+            <prop name="visible" type="boolean" required>Whether modal is displayed</prop>
+            <prop name="title" type="string" required>Modal title text</prop>
+            <prop name="message" type="string" required>Modal body text with details</prop>
+            <prop name="confirmText" type="string" default="Confirm">Text for confirm button</prop>
+            <prop name="cancelText" type="string" default="Cancel">Text for cancel button</prop>
+            <prop name="onConfirm" type="function" required>Callback when confirm button pressed</prop>
+            <prop name="onCancel" type="function" required>Callback when cancel button pressed</prop>
+            <prop name="destructive" type="boolean" default="false">If true, show warning styling for confirm button</prop>
+        </props>
+
+        <behavior>
+            <step>1. Displays Modal with 50% black semi-transparent overlay</step>
+            <step>2. Centered white/dark card with padding and border-radius</step>
+            <step>3. Shows icon (help or warning based on destructive flag)</step>
+            <step>4. Displays title and message text</step>
+            <step>5. Two buttons: Cancel (outline) and Confirm (filled)</step>
+            <step>6. Calls appropriate callback when button pressed</step>
+            <step>7. Modal closes when onCancel is called (handled by parent)</step>
+        </behavior>
+
+        <styling>
+            <element name="overlay">
+                - Full screen, semi-transparent black (rgba(0,0,0,0.5))
+                - Centers content vertically and horizontally
+            </element>
+            <element name="container">
+                - Max width 340px, 100% width on mobile
+                - Dark theme: dark background card
+                - Light theme: light background card
+                - Border radius: 16px
+                - Padding: 24px
+            </element>
+            <element name="icon">
+                - Size: 48x48
+                - Destructive: Red warning icon (#ef4444)
+                - Standard: Primary blue icon (COLORS.primary)
+                - Margin bottom: 16px
+            </element>
+            <element name="title">
+                - Font size: 20px
+                - Font weight: 700
+                - Text aligned center
+                - Theme-aware text color
+                - Margin bottom: 8px
+            </element>
+            <element name="message">
+                - Font size: 16px
+                - Line height: 22px
+                - Text aligned center
+                - Subtext color (lighter)
+                - Margin bottom: 24px
+            </element>
+            <element name="buttonRow">
+                - Flex row with 12px gap
+                - Full width
+            </element>
+            <element name="buttons">
+                - Height: 48px
+                - Border radius: 12px
+                - Font size: 16px, weight: 600
+                - Cancel: Outline style with border
+                - Confirm: Filled with color
+            </element>
+        </styling>
+
+        <modes>
+            <mode name="Standard">
+                <description>Regular confirmation dialog</description>
+                <icon>help-outline in primary blue</icon>
+                <confirmButton>Primary blue background</confirmButton>
+                <buttonText>Primary text color</buttonText>
+            </mode>
+            <mode name="Destructive">
+                <description>Warning for irreversible actions</description>
+                <icon>warning in red (#ef4444)</icon>
+                <confirmButton>Red background (#ef4444)</confirmButton>
+                <buttonText>White text</buttonText>
+            </mode>
+        </modes>
+
+        <example>
+            &lt;ConfirmationModal
+                visible={showDelete}
+                title="Delete Meal?"
+                message="This action cannot be undone. All ingredients will be removed."
+                confirmText="Delete"
+                cancelText="Cancel"
+                destructive={true}
+                onConfirm={handleDelete}
+                onCancel={() =&gt; setShowDelete(false)}
+            /&gt;
+        </example>
+
+        <hooks>
+            - useTheme: Applies theme colors (dark/light mode)
+        </hooks>
+
+        <dependencies>
+            - @expo/vector-icons: MaterialIcons for help-outline and warning icons
+            - react-native: Modal, Pressable, Text, View, StyleSheet
+            - useTheme hook for theme colors
+            - COLORS constant for primary color
+        </dependencies>
+
+        <notes>
+            <note>Modal is controlled component; parent must handle visible state</note>
+            <note>onRequestClose is called when device back button pressed (calls onCancel)</note>
+            <note>Supports both light and dark themes automatically</note>
+            <note>No animation provided; standard React Native Modal default fade</note>
+        </notes>
+    </component>
+
+</components>
+
+<hooks>
+    <description>Custom React hooks for shared functionality across components</description>
+
+    <hook name="useTheme">
+        <file>app/hooks/useTheme.ts</file>
+        <purpose>
+            Provides theme colors (light/dark) based on system preference or user override.
+            Respects user's profile theme setting while supporting system color scheme detection.
+        </purpose>
+
+        <dependencies>
+            - react-native: useColorScheme hook
+            - useProfile: Access user's themeOverride setting
+            - COLORS constant: Theme definitions
+        </dependencies>
+
+        <logic>
+            <step>1. Get system color scheme (light/dark) from useColorScheme()</step>
+            <step>2. Get user's theme override from profile (system/dark/light)</step>
+            <step>3. If override is 'system', use system scheme; otherwise use override</step>
+            <step>4. Determine isDark based on effective scheme</step>
+            <step>5. Select theme object (COLORS.dark or COLORS.light)</step>
+            <step>6. Return isDark, theme object, and effective scheme</step>
+        </logic>
+
+        <returns>
+            <field name="isDark" type="boolean">True if current theme is dark</field>
+            <field name="theme" type="ColorTheme">Color object with text, background, card, border, subtext colors</field>
+            <field name="effectiveScheme" type="'dark' | 'light' | null">Currently active scheme</field>
+        </returns>
+
+        <example>
+            export function MyComponent() {
+                const { isDark, theme } = useTheme();
+                
+                return (
+                    &lt;View style={{ backgroundColor: theme.background }}&gt;
+                        &lt;Text style={{ color: theme.text }}&gt;
+                            {isDark ? 'Dark Mode' : 'Light Mode'}
+                        &lt;/Text&gt;
+                    &lt;/View&gt;
+                );
+            }
+        </example>
+
+        <themeStructure>
+            <theme name="COLORS.light">
+                <color name="background">Light background color</color>
+                <color name="text">Dark text for light backgrounds</color>
+                <color name="subtext">Lighter text for secondary text</color>
+                <color name="card">Card/container background</color>
+                <color name="border">Subtle border color</color>
+            </theme>
+            <theme name="COLORS.dark">
+                <color name="background">Dark background color</color>
+                <color name="text">Light text for dark backgrounds</color>
+                <color name="subtext">Dimmer text for dark backgrounds</color>
+                <color name="card">Dark card background (slightly lighter than background)</color>
+                <color name="border">Subtle border for dark mode</color>
+            </theme>
+        </themeStructure>
+
+        <notes>
+            <note>Requires ProfileProvider to be mounted (uses useProfile)</note>
+            <note>Automatically updates when system theme changes (if override is 'system')</note>
+            <note>Automatically updates when user changes theme override in profile</note>
+            <note>Can be used to theme any component (text, backgrounds, borders, etc.)</note>
+        </notes>
+    </hook>
+
+</hooks>

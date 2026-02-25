@@ -1,43 +1,79 @@
-# Welcome to your Expo app 👋
+# PrepWise
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> **A modern meal planning, grocery management, and nutritional tracking app built with React Native and Expo.**
 
-## Get started
+<!-- Place your main app screenshot here -->
 
-1. Install dependencies
+![Hero Screenshot](docs/screenshots/hero.png)
 
+---
+
+## ✨ Features
+
+- **Meal Planning:** Create, organize, and customize meals for breakfast, lunch, dinner, and snacks. Add ingredients with proportional quantity calculations and organize them into sections.
+- **Meal Selection:** Visually select meals and ingredients from a rich database (100+ items, 9 categories). Ingredient picker supports custom quantities and units.
+- **Grocery Management:** Build and manage shopping lists with item names, quantities, units, and checklist functionality. Mark items as purchased and clear completed items.
+- **History Tracking:** Log consumed meals with date, meal type, ingredients, and personal notes. View historical meal data and track eating patterns.
+- **User Profile:** Store and manage user information (name, age, weight, height, daily nutritional goals). Set personal targets for calories, protein, carbs, and fat.
+- **Modal Panels:** Global modal management for ingredient pickers, confirmations, and overlays.
+- **Persistent Storage:** All data is saved locally using AsyncStorage for offline access.
+
+---
+
+## 📸 Demo / Screenshots
+
+<!-- Add more screenshots in docs/screenshots/ and reference them below -->
+
+| Home Screen                      | Meal Planning                    | Grocery List                               | History                                | Profile                                |
+| -------------------------------- | -------------------------------- | ------------------------------------------ | -------------------------------------- | -------------------------------------- |
+| ![Home](docs/screenshots/home.png) | ![Plan](docs/screenshots/plan.png) | ![Groceries](docs/screenshots/groceries.png) | ![History](docs/screenshots/history.png) | ![Profile](docs/screenshots/profile.png) |
+
+---
+
+## 🚀 Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/MealPrep.git
+   cd MealPrep
+   ```
+2. **Install dependencies:**
    ```bash
    npm install
    ```
-
-2. Start the app
-
+3. **Start Expo development server:**
    ```bash
-   npx expo start
+   npm run dev
    ```
+4. **Run on device/emulator:**
+   - For iOS: `npm run ios`
+   - For Android: `npm run android`
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🛠️ Usage
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **Meal Planning:** Navigate to the Plan tab, add meals and ingredients, organize by sections, and adjust quantities.
+- **Meal Selection:** Use the Meal Selection tab to visually pick meals and log them to history.
+- **Grocery Management:** Add items to your grocery list, mark as purchased, and clear completed items.
+- **History Tracking:** View your meal history, add notes, and track nutritional intake.
+- **Profile:** Set your personal information and nutritional goals in the Profile tab.
+- **Theme:** Switch between light/dark mode or use system preference in Profile settings.
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## 💬 Support / Donate
 
-```bash
-npm run reset-project
-```
+If you find PrepWise useful, consider starring the repo or donating to support development!
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- [GitHub Sponsors](https://github.com/sponsors/yourusername)
+- [Buy Me a Coffee](https://www.buymeacoffee.com/yourusername)
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## 📄 License
+
+MealPrep is released under the [MIT License](LICENSE).
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.

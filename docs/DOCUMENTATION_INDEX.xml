@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentationIndex>
+    <title>MealPrep Documentation Index</title>
+    <version>1.0</version>
+    <lastUpdated>2026-02-25</lastUpdated>
+    <description>
+        Complete documentation for the MealPrep application - a React Native meal planning, 
+        grocery management, and nutritional tracking application built with Expo and TypeScript.
+    </description>
+
+    <documentationFiles>
+        <file>
+            <name>PROJECT_OVERVIEW.xml</name>
+            <title>Project Overview</title>
+            <description>
+                High-level overview of the entire project including architecture, features, technology stack,
+                project structure, and conventions used throughout the codebase.
+            </description>
+            <contains>
+                - Project metadata and purpose
+                - Key features with file references
+                - System architecture patterns
+                - Data flow diagrams
+                - Technology stack and dependencies
+                - Project directory structure
+                - Build and run instructions
+                - Coding conventions and naming standards
+            </contains>
+            <audience>New developers, project managers, architects</audience>
+        </file>
+
+        <file>
+            <name>STORES.xml</name>
+            <title>State Management Stores</title>
+            <description>
+                Comprehensive documentation of all global state management providers and hooks.
+                Includes profileStore, ingredientsStore, historyStore, and groceriesStore.
+            </description>
+            <contains>
+                - profileStore: User profile and settings management
+                  * UserProfile type definition
+                  * Profile CRUD operations
+                  * Theme preference handling
+                  * Async persistence with AsyncStorage
+                
+                - ingredientsStore: Meal planning state
+                  * Meal → Section → Item hierarchical structure
+                  * Complete CRUD operations for all levels
+                  * Proportional quantity calculation algorithm
+                  * Meal reset and content clearing
+                  * Item toggle functionality
+                
+                - historyStore: Meal history tracking
+                  * HistoryEntry and HistoryIngredient types
+                  * Meal logging with timestamps
+                  * History entry CRUD operations
+                  * Newest-first ordering
+                
+                - groceriesStore: Shopping list management
+                  * Custom hook implementation (not a provider)
+                  * GroceryItem type definition
+                  * Add, update, remove, and toggle operations
+                  * Clear checked and clear all functionality
+            </contains>
+            <audience>Backend developers, state management specialists</audience>
+        </file>
+
+        <file>
+            <name>COMPONENTS_AND_HOOKS.xml</name>
+            <title>Components and Hooks</title>
+            <description>
+                Documentation for shared UI components and custom React hooks used across the application.
+                Includes PanelContext, ConfirmationModal, and useTheme hook.
+            </description>
+            <contains>
+                - PanelContext: Global modal/panel management system
+                  * PanelProvider for wrapping app
+                  * Panel open/close/toggle operations
+                  * Panel data passing mechanism
+                  * usePanels hook for accessing panel context
+                
+                - ConfirmationModal: Reusable confirmation dialog component
+                  * Standard and destructive modes
+                  * Customizable button text
+                  * Theme-aware styling (light/dark)
+                  * Icon support with material icons
+                  * Responsive design
+                
+                - useTheme: Theme provider hook
+                  * Light/dark mode support
+                  * System preference detection
+                  * User theme override options
+                  * Theme color object structure
+                  * Automatic theme updates
+            </contains>
+            <audience>UI developers, component specialists</audience>
+        </file>
+
+        <file>
+            <name>DATA_AND_CONFIGURATION.xml</name>
+            <title>Data and Configuration</title>
+            <description>
+                Static data files and configuration constants including ingredients database,
+                color palettes, typography, and spacing definitions.
+            </description>
+            <contains>
+                - ingredients.json: Comprehensive ingredient database
+                  * 9 ingredient categories
+                  * 100+ pre-configured ingredients
+                  * Default quantities and units per ingredient
+                  * Category structure with icons
+                  * Usage in ingredient picker
+                
+                - app/styles/global_style.ts: App design system
+                  * Color palette (primary, secondary, light/dark themes)
+                  * Typography/font definitions (Epilogue family)
+                  * Spacing system (xs, sm, md, lg, xl)
+                  * StyleSheet definitions
+                  * Theme-specific color mappings
+                
+                - constants/theme.ts: Expo theme configuration
+                  * Platform-specific colors
+                  * Light and dark mode definitions
+                  * Platform-specific fonts (iOS, Android, Web)
+                  * Tint colors and icon colors
+                
+                - app.json: Expo configuration
+                  * App metadata and versioning
+                  * Platform-specific settings
+                  * Plugin configuration
+                  * Permissions and capabilities
+            </contains>
+            <audience>Designers, frontend developers, configuration specialists</audience>
+        </file>
+    </documentationFiles>
+
+    <quickReferences>
+        <reference name="File Location Guide">
+            <category name="State Management">
+                <file path="app/stores/profileStore.tsx">User profile</file>
+                <file path="app/stores/ingredientsStore.tsx">Meal planning</file>
+                <file path="app/stores/historyStore.tsx">Meal history</file>
+                <file path="app/stores/groceriesStore.ts">Grocery list</file>
+            </category>
+            <category name="Components">
+                <file path="app/components/PanelContext.tsx">Modal management</file>
+                <file path="app/components/ConfirmationModal.tsx">Confirmation dialog</file>
+            </category>
+            <category name="Hooks">
+                <file path="app/hooks/useTheme.ts">Theme hook</file>
+            </category>
+            <category name="Data">
+                <file path="app/data/ingredients.json">Ingredient database</file>
+            </category>
+            <category name="Configuration">
+                <file path="app/styles/global_style.ts">App design system</file>
+                <file path="constants/theme.ts">Expo theme configuration</file>
+                <file path="app.json">Expo configuration</file>
+            </category>
+            <category name="Navigation">
+                <file path="app/_layout.tsx">Root layout</file>
+                <file path="app/main_screen.tsx">Tab navigation setup</file>
+            </category>
+        </reference>
+
+        <reference name="Common Tasks">
+            <task name="Add new ingredient">
+                Edit app/data/ingredients.json and add to appropriate category
+            </task>
+            <task name="Change primary color">
+                Update COLORS.primary in app/styles/global_style.ts
+            </task>
+            <task name="Add new meal plan feature">
+                Extend ingredientsStore types and add new mutation functions
+            </task>
+            <task name="Create new global modal">
+                Add panel ID to PanelContext and use usePanels() hook in component
+            </task>
+            <task name="Support new theme">
+                Update COLORS.light and COLORS.dark in global_style.ts and constants/theme.ts
+            </task>
+            <task name="Track new user data">
+                Add field to UserProfile type and implement in profileStore
+            </task>
+        </reference>
+
+        <reference name="Key Types">
+            <type name="UserProfile">
+                Location: profileStore.tsx
+                Fields: name, age, weight, height, dailyCalorieGoal, dailyProteinGoal, dailyCarbsGoal, dailyFatGoal, themeOverride
+            </type>
+            <type name="Meal">
+                Location: ingredientsStore.tsx
+                Fields: id, title, sections[]
+                Hierarchy: Meal → Sections → Items
+            </type>
+            <type name="HistoryEntry">
+                Location: historyStore.tsx
+                Fields: id, mealType, date, ingredients[], notes
+            </type>
+            <type name="GroceryItem">
+                Location: groceriesStore.ts
+                Fields: id, name, quantity, unit, checked
+            </type>
+        </reference>
+
+        <reference name="Color Usage">
+            <color name="Primary">
+                Value: #38e07b (Green)
+                Usage: Buttons, highlights, selected states, primary actions
+            </color>
+            <color name="Secondary">
+                Value: #2a4232 (Dark Green)
+                Usage: Secondary elements, inactive states
+            </color>
+            <color name="Background (Light)">
+                Value: #f6f8f7
+                Usage: Screen backgrounds in light mode
+            </color>
+            <color name="Background (Dark)">
+                Value: #122017
+                Usage: Screen backgrounds in dark mode
+            </color>
+            <color name="Text">
+                Light Mode: #0e1a13
+                Dark Mode: #e1e3e2
+                Usage: Primary text content
+            </color>
+            <color name="Card">
+                Light Mode: #ffffff
+                Dark Mode: #1a2c20
+                Usage: Card and container backgrounds
+            </color>
+        </reference>
+
+        <reference name="AsyncStorage Keys">
+            <key name="@profile_state_v1">User profile data (profileStore)</key>
+            <key name="@ingredients_state_v2">Meal planning data (ingredientsStore)</key>
+            <key name="@history_state_v1">Meal history data (historyStore)</key>
+            <key name="@groceries_state_v1">Grocery list data (groceriesStore)</key>
+        </reference>
+
+        <reference name="ID Generation">
+            <pattern name="Standard IDs">
+                Format: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                Used in: GroceryItem, HistoryEntry, custom ingredients, selected ingredients
+                Prevents collisions in rapid creation scenarios
+            </pattern>
+            <pattern name="Prefixed IDs">
+                Format: `custom_${Date.now()}_${random}` or `${parent}_${Date.now()}_${random}`
+                Usage: Custom items that need categorization
+            </pattern>
+        </reference>
+    </quickReferences>
+
+    <architecture>
+        <layering>
+            <layer name="Presentation">
+                <description>UI components and screens</description>
+                <files>app/tabs/*, components/</files>
+            </layer>
+            <layer name="State Management">
+                <description>Global state and context providers</description>
+                <files>app/stores/*, app/components/PanelContext.tsx</files>
+            </layer>
+            <layer name="Hooks and Utilities">
+                <description>Shared logic and custom hooks</description>
+                <files>app/hooks/*, components/</files>
+            </layer>
+            <layer name="Data and Configuration">
+                <description>Static data, constants, and config</description>
+                <files>app/data/*, app/styles/*, constants/</files>
+            </layer>
+            <layer name="Navigation">
+                <description>Routing and navigation setup</description>
+                <files>app/_layout.tsx, app/main_screen.tsx</files>
+            </layer>
+        </layering>
+
+        <dataFlow>
+            <flowSource>User interactions in UI components</flowSource>
+            <step1>Component calls store hook (useProfile, useIngredients, etc.)</step1>
+            <step2>Hook provides state and mutation functions</step2>
+            <step3>Component calls mutation function (addItem, updateProfile, etc.)</step3>
+            <step4>Mutation updates React state</step4>
+            <step5>useEffect triggers save to AsyncStorage</step5>
+            <step6>Component re-renders with new state</step6>
+            <step7>User sees updated UI</step7>
+        </dataFlow>
+
+        <persistencePattern>
+            <step>1. On mount: Load data from AsyncStorage in useEffect</step>
+            <step>2. Set isHydratingRef.current = true during load</step>
+            <step>3. Update state with loaded data</step>
+            <step>4. Set isHydratingRef.current = false after load</step>
+            <step>5. Skip first state change after load (hasEverSavedRef)</step>
+            <step>6. Auto-save every subsequent state change to AsyncStorage</step>
+            <step>7. Use alive flag to prevent state updates on unmounted components</step>
+        </persistencePattern>
+    </architecture>
+
+    <conventions>
+        <naming>
+            <convention category="Components">
+                PascalCase, descriptive names (ProfileProvider, ConfirmationModal)
+            </convention>
+            <convention category="Hooks">
+                camelCase with 'use' prefix (useProfile, useTheme, useGroceries)
+            </convention>
+            <convention category="Files">
+                kebab-case for multi-word files (panel-context.tsx), snake_case for styles (global_style.ts)
+            </convention>
+            <convention category="Types">
+                PascalCase (UserProfile, HistoryEntry, GroceryItem, Item)
+            </convention>
+            <convention category="Constants">
+                UPPER_SNAKE_CASE (STORAGE_KEY, COLORS, SPACING, FONT)
+            </convention>
+            <convention category="Storage Keys">
+                @scope_entity_version format (@profile_state_v1, @groceries_state_v1)
+            </convention>
+        </naming>
+
+        <codeStyle>
+            <convention>Use React Context API with AsyncStorage for state persistence</convention>
+            <convention>Implement hydration pattern with isHydratingRef and hasEverSavedRef</convention>
+            <convention>Use immutable updates with spread operator</convention>
+            <convention>Wrap AsyncStorage operations in try-catch</convention>
+            <convention>Use StyleSheet.create() for all styles</convention>
+            <convention>Use theme-aware colors from COLORS.light/dark</convention>
+            <convention>Arrow functions for components and functions</convention>
+            <convention>Comments for non-obvious logic</convention>
+        </codeStyle>
+
+        <structuring>
+            <convention>Store files: Types → Context → Constants → Functions → Provider → Hook</convention>
+            <convention>Component files: Props → Component → Styles → Exports</convention>
+            <convention>Data files: Static JSON structure matching TypeScript types</convention>
+        </structuring>
+    </conventions>
+
+    <troubleshooting>
+        <issue name="Data not persisting">
+            <cause>AsyncStorage save not being called</cause>
+            <solution>Check that component is within provider wrapper and useEffect dependencies include state</solution>
+        </issue>
+
+        <issue name="Theme not updating">
+            <cause>useTheme hook not re-rendering on profile change</cause>
+            <solution>Ensure useProfile is called before useTheme, check profile dependency in effect</solution>
+        </issue>
+
+        <issue name="Modal not appearing">
+            <cause>Panel not opened or PanelProvider not at root</cause>
+            <solution>Wrap app with PanelProvider and call openPanel with correct panelId</solution>
+        </issue>
+
+        <issue name="Proportional quantity showing NaN">
+            <cause>Division by zero when no items checked</cause>
+            <solution>Check guard clause in calculateProportionalQty for totalWeight === 0</solution>
+        </issue>
+
+        <issue name="ID collisions on rapid creation">
+            <cause>Using Date.now() alone for IDs</cause>
+            <solution>Use format `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`</solution>
+        </issue>
+    </troubleshooting>
+
+    <additionalResources>
+        <resource>
+            <name>Expo Documentation</name>
+            <url>https://docs.expo.dev</url>
+            <relevance>Framework and build configuration</relevance>
+        </resource>
+        <resource>
+            <name>React Native Documentation</name>
+            <url>https://reactnative.dev</url>
+            <relevance>Core components and APIs</relevance>
+        </resource>
+        <resource>
+            <name>AsyncStorage Documentation</name>
+            <url>https://react-native-async-storage.github.io</url>
+            <relevance>Data persistence</relevance>
+        </resource>
+        <resource>
+            <name>React Navigation</name>
+            <url>https://reactnavigation.org</url>
+            <relevance>Navigation and routing</relevance>
+        </resource>
+        <resource>
+            <name>Expo Router</name>
+            <url>https://expo.dev/routing</url>
+            <relevance>File-based routing</relevance>
+        </resource>
+    </additionalResources>
+
+    <documentationMaintenance>
+        <policy>
+            <rule>Update documentation when adding new stores</rule>
+            <rule>Update documentation when changing data structures</rule>
+            <rule>Update documentation when changing color scheme</rule>
+            <rule>Document new custom hooks in COMPONENTS_AND_HOOKS.xml</rule>
+            <rule>Document new ingredients by updating DATA_AND_CONFIGURATION.xml</rule>
+            <rule>Keep version consistent across all documentation files</rule>
+        </policy>
+
+        <changelog>
+            <entry date="2026-02-25" version="1.0">
+                Initial comprehensive documentation created
+                - PROJECT_OVERVIEW.xml: Complete project structure and architecture
+                - STORES.xml: All state management stores documented
+                - COMPONENTS_AND_HOOKS.xml: Shared components and hooks
+                - DATA_AND_CONFIGURATION.xml: Data structures and design system
+                - DOCUMENTATION_INDEX.xml: This index and quick references
+            </entry>
+        </changelog>
+    </documentationMaintenance>
+
+    <notes>
+        <note>All documentation files are in XML format for easy parsing and transformation</note>
+        <note>Documentation matches current codebase state as of 2026-02-25</note>
+        <note>Code examples are simplified for clarity; refer to actual source files for complete implementations</note>
+        <note>All file paths are relative to project root</note>
+        <note>Type definitions shown are actual TypeScript types from the codebase</note>
+    </notes>
+
+</documentationIndex>

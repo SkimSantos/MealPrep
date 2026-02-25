@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataAndConfiguration>
+    <description>Static data, constants, and configuration files for the application</description>
+
+    <dataFile name="ingredients.json">
+        <file>app/data/ingredients.json</file>
+        <purpose>
+            Comprehensive ingredient database with 9 categories and 100+ ingredients.
+            Provides default quantities and units for meal planning.
+        </purpose>
+
+        <structure>
+            <root name="categories">
+                <description>Array of ingredient categories</description>
+                <field type="Category[]">Array containing category objects</field>
+            </root>
+        </structure>
+
+        <types>
+            <type name="Category">
+                <description>Grouping of related ingredients</description>
+                <fields>
+                    <field name="id" type="string">Unique category identifier (e.g., "protein", "vegetables")</field>
+                    <field name="name" type="string">Display name (e.g., "Proteins", "Vegetables")</field>
+                    <field name="icon" type="string">Icon name for display (from react-native-vector-icons)</field>
+                    <field name="ingredients" type="Ingredient[]">Array of ingredients in this category</field>
+                </fields>
+            </type>
+
+            <type name="Ingredient">
+                <description>Single ingredient with default values</description>
+                <fields>
+                    <field name="id" type="string">Unique ingredient identifier (snake_case, e.g., "chicken_breast")</field>
+                    <field name="name" type="string">Display name (e.g., "Chicken Breast")</field>
+                    <field name="defaultUnit" type="string">Unit of measurement (e.g., "g", "cup", "units")</field>
+                    <field name="defaultQty" type="number">Default quantity when added to meal (e.g., 150 for 150g)</field>
+                </fields>
+            </type>
+        </types>
+
+        <categories>
+            <category id="protein" name="Proteins" icon="egg">
+                <description>Protein sources including meats, fish, eggs, and alternatives</description>
+                <count>19 ingredients</count>
+                <ingredients>
+                    <ingredient id="chicken_breast" name="Chicken Breast" unit="g" qty="150" />
+                    <ingredient id="chicken_thigh" name="Chicken Thigh" unit="g" qty="150" />
+                    <ingredient id="ground_beef" name="Ground Beef" unit="g" qty="150" />
+                    <ingredient id="beef_steak" name="Beef Steak" unit="g" qty="200" />
+                    <ingredient id="pork_chop" name="Pork Chop" unit="g" qty="150" />
+                    <ingredient id="pork_tenderloin" name="Pork Tenderloin" unit="g" qty="150" />
+                    <ingredient id="ground_turkey" name="Ground Turkey" unit="g" qty="150" />
+                    <ingredient id="turkey_breast" name="Turkey Breast" unit="g" qty="150" />
+                    <ingredient id="salmon" name="Salmon" unit="g" qty="150" />
+                    <ingredient id="tuna" name="Tuna" unit="g" qty="150" />
+                    <ingredient id="cod" name="Cod" unit="g" qty="150" />
+                    <ingredient id="tilapia" name="Tilapia" unit="g" qty="150" />
+                    <ingredient id="shrimp" name="Shrimp" unit="g" qty="150" />
+                    <ingredient id="eggs" name="Eggs" unit="units" qty="2" />
+                    <ingredient id="egg_whites" name="Egg Whites" unit="ml" qty="100" />
+                    <ingredient id="tofu" name="Tofu" unit="g" qty="150" />
+                    <ingredient id="tempeh" name="Tempeh" unit="g" qty="100" />
+                    <ingredient id="bacon" name="Bacon" unit="slices" qty="3" />
+                    <ingredient id="sausage" name="Sausage" unit="g" qty="100" />
+                </ingredients>
+            </category>
+
+            <category id="vegetables" name="Vegetables" icon="eco">
+                <description>Fresh vegetables for balanced nutrition</description>
+                <count>17+ ingredients</count>
+                <ingredients>
+                    <ingredient id="broccoli" name="Broccoli" unit="g" qty="100" />
+                    <ingredient id="spinach" name="Spinach" unit="g" qty="50" />
+                    <ingredient id="kale" name="Kale" unit="g" qty="50" />
+                    <ingredient id="carrots" name="Carrots" unit="g" qty="80" />
+                    <ingredient id="bell_pepper" name="Bell Pepper" unit="units" qty="1" />
+                    <ingredient id="tomato" name="Tomato" unit="units" qty="1" />
+                    <ingredient id="cucumber" name="Cucumber" unit="units" qty="1" />
+                    <ingredient id="zucchini" name="Zucchini" unit="units" qty="1" />
+                    <ingredient id="asparagus" name="Asparagus" unit="g" qty="100" />
+                    <ingredient id="green_beans" name="Green Beans" unit="g" qty="100" />
+                    <ingredient id="cauliflower" name="Cauliflower" unit="g" qty="100" />
+                    <ingredient id="mushrooms" name="Mushrooms" unit="g" qty="80" />
+                    <ingredient id="corn" name="Corn" unit="g" qty="80" />
+                    <!-- Additional vegetables included -->
+                </ingredients>
+            </category>
+
+            <category id="fruits" name="Fruits" icon="spa">
+                <description>Fresh fruits for vitamins and fiber</description>
+                <count>15+ ingredients</count>
+            </category>
+
+            <category id="grains" name="Grains" icon="grain">
+                <description>Whole grains and carbohydrate sources</description>
+                <count>12+ ingredients</count>
+            </category>
+
+            <category id="dairy" name="Dairy" icon="local-shipping">
+                <description>Dairy products including milk, cheese, and yogurt</description>
+                <count>8+ ingredients</count>
+            </category>
+
+            <category id="legumes" name="Legumes" icon="bug-report">
+                <description>Beans and legumes for plant-based protein</description>
+                <count>8+ ingredients</count>
+            </category>
+
+            <category id="nuts_seeds" name="Nuts &amp; Seeds" icon="nature">
+                <description>Nuts and seeds for healthy fats and protein</description>
+                <count>10+ ingredients</count>
+            </category>
+
+            <category id="oils" name="Oils" icon="opacity">
+                <description>Cooking oils and fats</description>
+                <count>6+ ingredients</count>
+            </category>
+
+            <category id="condiments" name="Condiments" icon="whatshot">
+                <description>Spices, sauces, and condiments for flavoring</description>
+                <count>15+ ingredients</count>
+            </category>
+        </categories>
+
+        <usage>
+            <purpose>Ingredient Picker uses this data to populate available ingredients</purpose>
+            <access>Imported in ingredient picker components</access>
+            <update>Add new ingredients or categories by extending the JSON structure</update>
+            <example>
+                {
+                    "id": "custom_category",
+                    "name": "Custom Foods",
+                    "icon": "add",
+                    "ingredients": [
+                        { "id": "my_item", "name": "My Item", "defaultUnit": "g", "defaultQty": 100 }
+                    ]
+                }
+            </example>
+        </usage>
+
+        <notes>
+            <note>Total of 100+ pre-configured ingredients across 9 categories</note>
+            <note>Default quantities are realistic serving sizes</note>
+            <note>Units vary based on ingredient type (grams, units, cups, slices, etc.)</note>
+            <note>Categories use Material Design icons via react-native-vector-icons</note>
+        </notes>
+    </dataFile>
+
+    <configuration name="Theme Configuration">
+        <file>app/styles/global_style.ts</file>
+        <purpose>
+            Central color palette, typography, and spacing definitions used throughout the app.
+            Provides design system constants and StyleSheet definitions.
+        </purpose>
+
+        <constants>
+            <constant name="COLORS" type="Object">
+                <description>Color palette for light and dark modes</description>
+                <fields>
+                    <field name="primary">Primary accent color: #38e07b (green)</field>
+                    <field name="secondary">Secondary color: #2a4232 (dark green)</field>
+                    <field name="backgroundLight">Light mode background: #f6f8f7</field>
+                    <field name="backgroundDark">Dark mode background: #122017</field>
+                    <field name="textLight">Light text color: #f6f8f7</field>
+                    <field name="textDark">Dark text color: #122017</field>
+                </fields>
+                <themeObject name="light">
+                    <color name="background">#f6f8f7 - Off-white background</color>
+                    <color name="text">#0e1a13 - Dark text for light background</color>
+                    <color name="card">#ffffff - White card/container background</color>
+                    <color name="border">#d1e6d9 - Light green border</color>
+                    <color name="subtext">#51946c - Muted green text</color>
+                </themeObject>
+                <themeObject name="dark">
+                    <color name="background">#122017 - Very dark background</color>
+                    <color name="text">#e1e3e2 - Light text for dark background</color>
+                    <color name="card">#1a2c20 - Dark green card background</color>
+                    <color name="border">#2a4232 - Dark green border</color>
+                    <color name="subtext">#a6cbb5 - Light green text</color>
+                </themeObject>
+            </constant>
+
+            <constant name="FONT" type="Object">
+                <description>Font family definitions</description>
+                <fields>
+                    <field name="regular">Epilogue-Regular - Standard font weight</field>
+                    <field name="bold">Epilogue-Bold - Bold font weight</field>
+                    <field name="medium">Epilogue-Medium - Medium font weight</field>
+                </fields>
+            </constant>
+
+            <constant name="SPACING" type="Object">
+                <description>Standard spacing/padding values for consistent layout</description>
+                <fields>
+                    <field name="xs">4px - Extra small spacing</field>
+                    <field name="sm">8px - Small spacing</field>
+                    <field name="md">16px - Medium spacing</field>
+                    <field name="lg">24px - Large spacing</field>
+                    <field name="xl">32px - Extra large spacing</field>
+                </fields>
+                <usage>
+                    Use spacing constants for consistent padding and margins:
+                    marginVertical: SPACING.md // 16px
+                    paddingHorizontal: SPACING.lg // 24px
+                </usage>
+            </constant>
+        </constants>
+
+        <styleDefinitions>
+            <style name="safe">
+                <purpose>Safe area container style</purpose>
+                <properties>flex: 1</properties>
+            </style>
+
+            <style name="container">
+                <purpose>Main container for screens</purpose>
+                <properties>flex: 1</properties>
+            </style>
+
+            <style name="topBarWrap">
+                <purpose>Top bar wrapper with padding</purpose>
+                <properties>
+                    paddingHorizontal: 16
+                    paddingTop: 12
+                    paddingBottom: 8
+                </properties>
+            </style>
+
+            <style name="topBar">
+                <purpose>Top bar layout (header)</purpose>
+                <properties>
+                    height: 48
+                    flexDirection: row
+                    alignItems: center
+                    justifyContent: space-between
+                </properties>
+            </style>
+
+            <style name="logoWrap">
+                <purpose>Logo/brand container</purpose>
+                <properties>
+                    width: 48
+                    height: 48
+                    justifyContent: center
+                    alignItems: flex-start
+                </properties>
+            </style>
+
+            <style name="avatarBtn">
+                <purpose>Avatar/profile button container</purpose>
+                <properties>
+                    width: 48
+                    height: 48
+                    justifyContent: center
+                    alignItems: flex-end
+                </properties>
+            </style>
+
+            <style name="title">
+                <purpose>Main title/heading text</purpose>
+                <properties>
+                    fontSize: 28
+                    fontWeight: 700
+                    lineHeight: 32
+                </properties>
+            </style>
+
+            <style name="searchWrap">
+                <purpose>Search input wrapper with padding</purpose>
+                <properties>
+                    paddingHorizontal: 16
+                    paddingVertical: 10
+                </properties>
+            </style>
+        </styleDefinitions>
+
+        <colorScheme>
+            <design>Green-based design system with light and dark variants</design>
+            <primary>#38e07b - Fresh green for action items and highlights</primary>
+            <secondary>#2a4232 - Dark green for secondary elements</secondary>
+            <lightBackground>Off-white (#f6f8f7) for light mode</lightBackground>
+            <darkBackground>Very dark green (#122017) for dark mode</darkBackground>
+            <accessibility>High contrast ratios for WCAG compliance</accessibility>
+        </colorScheme>
+
+        <usage>
+            <import>import { COLORS, FONT, SPACING, styles } from '../styles/global_style'</import>
+            <example>
+                import { COLORS } from '../styles/global_style';
+                
+                const container = {
+                    backgroundColor: isDark ? COLORS.dark.background : COLORS.light.background,
+                    paddingHorizontal: SPACING.md
+                };
+            </example>
+            <componentExample>
+                &lt;View style={styles.topBar}&gt;
+                    &lt;Text style={{ color: COLORS.primary, fontFamily: FONT.bold }}&gt;
+                        MealPrep
+                    &lt;/Text&gt;
+                &lt;/View&gt;
+            </componentExample>
+        </usage>
+
+        <notes>
+            <note>COLORS object provides both theme-agnostic colors (primary, secondary) and theme-specific palettes (light, dark)</note>
+            <note>Use theme-specific colors (COLORS.light.background, COLORS.dark.background) for theme support</note>
+            <note>SPACING constants ensure consistent layout rhythm across the app</note>
+            <note>StyleSheet.create() definitions prevent recreating objects on every render</note>
+            <note>Font family is set to Epilogue which must be included in assets or loaded via expo-font</note>
+        </notes>
+    </configuration>
+
+    <configuration name="Theme Constants">
+        <file>constants/theme.ts</file>
+        <purpose>
+            Platform-specific color definitions and font configurations for light and dark modes.
+            Compatible with Expo and React Native across iOS, Android, and Web platforms.
+        </purpose>
+
+        <exports>
+            <export name="Colors">
+                <description>Color palette object with light and dark themes</description>
+                <structure>
+                    <light>
+                        <field name="text">#11181C - Dark text for light mode</field>
+                        <field name="background">#fff - White background</field>
+                        <field name="tint">#0a7ea4 - Tint color (blue-teal)</field>
+                        <field name="icon">#687076 - Icon color</field>
+                        <field name="tabIconDefault">#687076 - Default tab icon color</field>
+                        <field name="tabIconSelected">#0a7ea4 - Selected tab icon color</field>
+                    </light>
+                    <dark>
+                        <field name="text">#ECEDEE - Light text for dark mode</field>
+                        <field name="background">#151718 - Dark background</field>
+                        <field name="tint">#fff - White tint</field>
+                        <field name="icon">#9BA1A6 - Light icon color</field>
+                        <field name="tabIconDefault">#9BA1A6 - Default tab icon</field>
+                        <field name="tabIconSelected">#fff - Selected tab icon</field>
+                    </dark>
+                </structure>
+            </export>
+
+            <export name="Fonts">
+                <description>Platform-specific font definitions using Platform.select</description>
+                <platforms>
+                    <platform name="iOS">
+                        <font name="sans">system-ui - iOS system sans-serif</font>
+                        <font name="serif">ui-serif - iOS system serif</font>
+                        <font name="rounded">ui-rounded - iOS system rounded</font>
+                        <font name="mono">ui-monospace - iOS system monospace</font>
+                    </platform>
+                    <platform name="Android">
+                        <font name="sans">normal - Default sans-serif</font>
+                        <font name="serif">serif - Serif font</font>
+                        <font name="rounded">normal - Rounded font</font>
+                        <font name="mono">monospace - Monospace font</font>
+                    </platform>
+                    <platform name="Web">
+                        <font name="sans">system-ui, -apple-system, BlinkMacSystemFont... - Web system stack</font>
+                        <font name="serif">Georgia, Times New Roman... - Web serif stack</font>
+                        <font name="rounded">SF Pro Rounded... - Web rounded stack</font>
+                        <font name="mono">SFMono-Regular, Menlo... - Web monospace stack</font>
+                    </platform>
+                </platforms>
+            </export>
+        </exports>
+
+        <usage>
+            <import>import { Colors, Fonts } from '@/constants/theme'</import>
+            <colorExample>
+                const useThemeColor = (colorName: 'text' | 'background' | 'tint') =&gt; {
+                    const isDark = useColorScheme() === 'dark';
+                    const colors = isDark ? Colors.dark : Colors.light;
+                    return colors[colorName];
+                };
+            </colorExample>
+            <fontExample>
+                const fontFamily = Fonts.sans; // Platform-specific sans font
+                const boldFont = Fonts.mono;   // Platform-specific monospace
+            </fontExample>
+        </usage>
+
+        <notes>
+            <note>Separate from global_style.ts which defines app-specific colors</note>
+            <note>This file provides base Expo theme colors</note>
+            <note>Platform.select ensures correct font families for each platform</note>
+            <note>Tint color changes between light (#0a7ea4) and dark (#fff) modes</note>
+        </notes>
+    </configuration>
+
+    <configuration name="App Configuration">
+        <file>app.json</file>
+        <purpose>
+            Expo configuration file that defines app metadata, plugins, permissions, and build settings.
+        </purpose>
+        <note>See app.json for complete application configuration including name, version, plugins, and platform-specific settings</note>
+    </configuration>
+
+</dataAndConfiguration>
