@@ -66,8 +66,8 @@
 
 If you find PrepWise useful, consider starring the repo or donating to support development!
 
-- [GitHub Sponsors](https://github.com/sponsors/yourusername)
-- [Buy Me a Coffee](https://www.buymeacoffee.com/yourusername)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)
+](https://ko-fi.com/U7U31UUWQU)
 
 ---
 
