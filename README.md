@@ -2,9 +2,12 @@
 
 > **A modern meal planning, grocery management, and nutritional tracking app built with React Native and Expo.**
 
-<!-- Place your main app screenshot here -->
+<!-- Place your main app screenshot here -
 
-![Hero Screenshot](docs/screenshots/hero.png)
+
+```
+<img src="assets/screenshots/front.jpg" width="100" />
+```
 
 ---
 
