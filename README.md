@@ -2,12 +2,7 @@
 
 > **A modern meal planning, grocery management, and nutritional tracking app built with React Native and Expo.**
 
-<!-- Place your main app screenshot here -
-
-
-```
-<img src="assets/screenshots/front.jpg" width="100" />
-```
+<img src="assets/screenshots/front.png" width="200" />
 
 ---
 
@@ -25,11 +20,17 @@
 
 ## 📸 Demo / Screenshots
 
-<!-- Add more screenshots in docs/screenshots/ and reference them below -->
+### Home Screen
+<img src="assets/screenshots/front.png" width="150" /> <img src="assets/screenshots/choose.png" width="150" /> <img src="assets/screenshots/selection.jpg" width="150" /> <img src="assets/screenshots/plate.jpg" width="150" />
 
-| Home Screen                      | Meal Planning                    | Grocery List                               | History                                | Profile                                |
-| -------------------------------- | -------------------------------- | ------------------------------------------ | -------------------------------------- | -------------------------------------- |
-| ![Home](docs/screenshots/home.png) | ![Plan](docs/screenshots/plan.png) | ![Groceries](docs/screenshots/groceries.png) | ![History](docs/screenshots/history.png) | ![Profile](docs/screenshots/profile.png) |
+### Plan Screen
+<img src="assets/screenshots/plan.jpg" width="150" /> <img src="assets/screenshots/ingredient.jpg" width="150" />
+
+### History Screen
+<img src="assets/screenshots/history.jpg" width="150" />
+
+### Profile Screen
+<img src="assets/screenshots/profile.jpg" width="150" />
 
 ---
 
